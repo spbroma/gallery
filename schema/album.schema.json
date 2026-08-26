@@ -1,0 +1,4 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"album.schema.json","title":"Photo album metadata","type":"object","required":["id","title","date"],
+  "properties":{"id":{"type":"string","pattern":"^[a-z0-9]+(?:-[a-z0-9]+)*$"},"title":{"type":"string","minLength":1},"date":{"type":"string","format":"date"},"location":{"type":"object","properties":{"city":{"type":"string"},"country":{"type":"string"}},"additionalProperties":false},"genres":{"type":"array","items":{"type":"string"},"uniqueItems":true},"subjects":{"type":"array","items":{"type":"string"},"uniqueItems":true},"tags":{"type":"array","items":{"type":"string"},"uniqueItems":true}},"additionalProperties":false
+}

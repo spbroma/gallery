@@ -1,0 +1,258 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import shutil
+import subprocess
+import tempfile
+import unicodedata
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+from storage import GoogleDriveStorage, LocalStorage
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    result = dict(base)
+    for key, value in override.items():
+        result[key] = deep_merge(result[key], value) if isinstance(value, dict) and isinstance(result.get(key), dict) else value
+    return result
+
+
+def load_config(path: Path, overlay: Path | None) -> dict[str, Any]:
+    config = json.loads(path.read_text(encoding="utf-8"))
+    return deep_merge(config, json.loads(overlay.read_text(encoding="utf-8"))) if overlay else config
+
+
+def resolve_project_path(value: str) -> Path:
+    path = Path(value).expanduser()
+    return path if path.is_absolute() else PROJECT_ROOT / path
+
+
+def slugify(value: str) -> str:
+    ascii_value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-zA-Z0-9]+", "-", ascii_value).strip("-").lower() or "album"
+
+
+def parse_folder(shoot: Path) -> tuple[str, str, int]:
+    match = re.match(r"(?P<date>\d{2}-\d{2})\s*-?\s*(?P<title>.*)", shoot.name)
+    year = int(shoot.parent.name) if shoot.parent.name.isdigit() else 0
+    if not match:
+        return shoot.name, str(year), year
+    date = f"{year}-{match.group('date')}" if year else match.group("date")
+    title = match.group("title").strip(" ,-–") or datetime.strptime(date, "%Y-%m-%d").strftime("%d %B")
+    return title, date, year
+
+
+def infer_city(title: str) -> str | None:
+    cities = ["Munich", "Bonn", "Florence", "Berlin", "Augsburg", "Dusseldorf", "Milan", "Regensburg"]
+    return next((item for item in cities if item.lower() in title.lower()), None)
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
+def load_exclusions(config: dict[str, Any], archive: Path) -> list[dict[str, Any]]:
+    value = config["publishing"].get("exclusionsFile")
+    if not value:
+        return []
+    path = resolve_project_path(value)
+    document = read_json(path)
+    rules: list[dict[str, Any]] = []
+    archive_resolved = archive.resolve()
+    for entry in document.get("exclude", []):
+        folder = (archive / entry["folder"]).resolve()
+        try:
+            folder.relative_to(archive_resolved)
+        except ValueError as error:
+            raise ValueError(f"Exclusion escapes archive root: {entry['folder']}") from error
+        files = entry.get("files")
+        rules.append({"folder": folder, "files": {item.casefold() for item in files} if files else None})
+    return rules
+
+
+def is_within(path: Path, folder: Path) -> bool:
+    try:
+        path.resolve().relative_to(folder)
+        return True
+    except ValueError:
+        return False
+
+
+def folder_is_excluded(path: Path, exclusions: list[dict[str, Any]]) -> bool:
+    return any(rule["files"] is None and is_within(path, rule["folder"]) for rule in exclusions)
+
+
+def file_is_excluded(path: Path, exclusions: list[dict[str, Any]]) -> bool:
+    for rule in exclusions:
+        files = rule["files"]
+        if files is None or not is_within(path, rule["folder"]):
+            continue
+        relative = path.resolve().relative_to(rule["folder"]).as_posix().casefold()
+        if relative in files or path.name.casefold() in files:
+            return True
+    return folder_is_excluded(path, exclusions)
+
+
+def select_source(shoot: Path, config: dict[str, Any], exclusions: list[dict[str, Any]]) -> tuple[Path, Path, int] | None:
+    publishing = config["publishing"]
+    suffix = publishing["blackFolderSuffix"]
+    extensions = {item.lower() for item in config["processing"]["formats"]}
+    selected = sorted(
+        (int(path.name), path, shoot / f"{path.name}{suffix}")
+        for path in shoot.iterdir()
+        if path.is_dir()
+        and path.name.isdigit()
+        and (shoot / f"{path.name}{suffix}").is_dir()
+        and not folder_is_excluded(path, exclusions)
+        and not folder_is_excluded(shoot / f"{path.name}{suffix}", exclusions)
+        and any(item.is_file() and item.suffix.lower() in extensions for item in (shoot / f"{path.name}{suffix}").iterdir())
+    )
+    if not selected:
+        return None
+    rating, source, black = selected[-1]
+    return source, black, rating
+
+
+def discover_shoots(archive: Path, config: dict[str, Any], exclusions: list[dict[str, Any]]) -> list[tuple[Path, Path, Path, int]]:
+    allowlist = set(config["publishing"].get("albumAllowlist") or [])
+    result: list[tuple[Path, Path, Path, int]] = []
+    for year in sorted((path for path in archive.iterdir() if path.is_dir()), reverse=True):
+        for shoot in sorted((path for path in year.iterdir() if path.is_dir()), reverse=True):
+            relative = shoot.relative_to(archive).as_posix()
+            if (allowlist and relative not in allowlist) or folder_is_excluded(shoot, exclusions):
+                continue
+            selected = select_source(shoot, config, exclusions)
+            if selected:
+                result.append((shoot, selected[0], selected[1], selected[2]))
+    return result
+
+
+def convert_image(source: Path, destination: Path, max_edge: int, quality: int) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as handle:
+        resized = Path(handle.name)
+    try:
+        subprocess.run(["sips", "-s", "format", "jpeg", "-Z", str(max_edge), str(source), "--out", str(resized)], check=True, stdout=subprocess.DEVNULL)
+        if not resized.exists() or resized.stat().st_size == 0:
+            raise ValueError(f"Image decoder returned no data for {source.name}")
+        subprocess.run(["cwebp", "-quiet", "-q", str(quality), "-metadata", "none", str(resized), "-o", str(destination)], check=True)
+    finally:
+        resized.unlink(missing_ok=True)
+
+
+def build_storage(config: dict[str, Any], output_root: Path):
+    storage = config["storage"]
+    if storage["provider"] == "local":
+        return LocalStorage(output_root)
+    if storage["provider"] == "googleDrive":
+        drive = storage["googleDrive"]
+        if not drive.get("enabled"):
+            raise RuntimeError("Set storage.googleDrive.enabled=true before selecting Google Drive.")
+        return GoogleDriveStorage(drive["publicFolderId"], drive["credentialsEnv"])
+    raise ValueError(f"Unknown storage provider: {storage['provider']}")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Build safe web derivatives and gallery.json")
+    parser.add_argument("--config", default="config/gallery.config.json")
+    parser.add_argument("--overlay", help="Optional JSON config merged over the main config")
+    args = parser.parse_args()
+    config = load_config(resolve_project_path(args.config), resolve_project_path(args.overlay) if args.overlay else None)
+    archive = resolve_project_path(config["archiveRoot"])
+    output_root = resolve_project_path(config["outputRoot"])
+    data_file = resolve_project_path(config["dataFile"])
+    if not archive.is_dir():
+        raise SystemExit(f"Archive does not exist: {archive}")
+    if not shutil.which("sips") or not shutil.which("cwebp"):
+        raise SystemExit("sips and cwebp are required to generate WebP derivatives")
+
+    storage = build_storage(config, output_root)
+    processing = config["processing"]
+    extensions = {item.lower() for item in processing["formats"]}
+    limit = config["publishing"].get("maxPhotosPerAlbum")
+    exclusions = load_exclusions(config, archive)
+    albums: list[dict[str, Any]] = []
+    photos: list[dict[str, Any]] = []
+    skipped: list[dict[str, str]] = []
+
+    with tempfile.TemporaryDirectory(prefix="gallery-publish-") as temp:
+        staging = Path(temp)
+        for shoot, source_dir, black_dir, rating in discover_shoots(archive, config, exclusions):
+            title, date, year = parse_folder(shoot)
+            metadata = read_json(shoot / "metadata" / "album.json")
+            relative = shoot.relative_to(archive).as_posix()
+            album_id = metadata.get("id") or slugify(relative)
+            title = metadata.get("title") or title
+            city = metadata.get("location", {}).get("city") or infer_city(title)
+            album_stage = staging / album_id
+            selected_names = {
+                path.stem.casefold() for path in black_dir.iterdir()
+                if path.is_file() and path.suffix.lower() in extensions and not file_is_excluded(path, exclusions)
+            }
+            images = sorted(
+                path for path in source_dir.iterdir()
+                if path.is_file()
+                and path.suffix.lower() in extensions
+                and path.stem.casefold() in selected_names
+                and not file_is_excluded(path, exclusions)
+            )
+            if limit:
+                images = images[:int(limit)]
+            for image in images:
+                photo_id = slugify(image.stem)
+                web_name = f"{photo_id}.webp"
+                web_path = album_stage / "web" / web_name
+                thumb_path = album_stage / "thumbs" / web_name
+                try:
+                    convert_image(image, web_path, processing["webMaxEdge"], processing["webQuality"])
+                    convert_image(image, thumb_path, processing["thumbMaxEdge"], processing["thumbQuality"])
+                except (subprocess.CalledProcessError, ValueError) as error:
+                    web_path.unlink(missing_ok=True)
+                    thumb_path.unlink(missing_ok=True)
+                    skipped.append({"album": relative, "file": image.name, "reason": type(error).__name__})
+                    print(f"Skipped unreadable image: {relative}/{image.name}")
+                    continue
+                base_url = config["publicBaseUrl"].rstrip("/")
+                photo_metadata = read_json(shoot / "metadata" / "photos" / f"{image.stem}.json")
+                photos.append({
+                    "id": photo_id, "albumId": album_id,
+                    "src": f"{base_url}/{album_id}/web/{web_name}", "thumb": f"{base_url}/{album_id}/thumbs/{web_name}",
+                    "title": title, "date": date, "year": year, "city": city, "rating": rating,
+                    "genres": photo_metadata.get("genres", metadata.get("genres", [])),
+                    "subjects": photo_metadata.get("subjects", metadata.get("subjects", [])),
+                    "tags": photo_metadata.get("tags", metadata.get("tags", [])),
+                    "featured": bool(photo_metadata.get("featured", False)),
+                })
+            if images:
+                storage.sync_album(album_id, album_stage)
+                albums.append({
+                    "id": album_id, "title": title, "date": date, "year": year, "city": city,
+                    "genres": metadata.get("genres", []), "subjects": metadata.get("subjects", []),
+                    "tags": metadata.get("tags", []), "photoCount": len([photo for photo in photos if photo["albumId"] == album_id]),
+                })
+
+    active_ids = {album["id"] for album in albums}
+    if not config["publishing"].get("albumAllowlist") and output_root.exists():
+        for existing in output_root.iterdir():
+            if existing.is_dir() and existing.name not in active_ids:
+                shutil.rmtree(existing)
+
+    manifest = {"version": 1, "generatedAt": datetime.now(timezone.utc).isoformat(), "source": config["storage"]["provider"], "albums": albums, "photos": photos, "skipped": skipped}
+    data_file.parent.mkdir(parents=True, exist_ok=True)
+    data_file.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if photos and config["storage"]["provider"] == "local":
+        first_web = output_root / photos[0]["albumId"] / "web" / f"{photos[0]['id']}.webp"
+        if first_web.exists():
+            shutil.copy2(first_web, PROJECT_ROOT / "public" / "og.webp")
+    print(f"Published {len(photos)} photos from {len(albums)} albums; skipped {len(skipped)} → {data_file}")
+
+
+if __name__ == "__main__":
+    main()

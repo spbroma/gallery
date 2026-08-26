@@ -1,0 +1,4 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"photo.schema.json","title":"Photo metadata","type":"object","required":["id"],
+  "properties":{"id":{"type":"string","minLength":1},"genres":{"type":"array","items":{"type":"string"},"uniqueItems":true},"subjects":{"type":"array","items":{"type":"string"},"uniqueItems":true},"tags":{"type":"array","items":{"type":"string"},"uniqueItems":true},"featured":{"type":"boolean"}},"additionalProperties":false
+}

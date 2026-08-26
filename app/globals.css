@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+:root { --black: #050505; --white: #f4f4f0; --muted: #777; --line: #242424; }
+* { box-sizing: border-box; }
+html { background: var(--black); scroll-behavior: smooth; }
+body { margin: 0; background: var(--black); color: var(--white); font-family: Arial, Helvetica, sans-serif; }
+button { font: inherit; }
+header { align-items: center; display: flex; height: 84px; padding: 0 clamp(16px, 2.8vw, 44px); }
+h1 { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin: 0; }
+.timeline { display: grid; grid-template-columns: clamp(130px, 15vw, 220px) minmax(0, 1fr); padding: 0 clamp(8px, 1.1vw, 18px); }
+aside { border-top: 1px solid var(--line); }
+aside nav { display: flex; flex-direction: column; gap: 10px; padding: 15px 22px 40px 0; position: sticky; top: 0; }
+aside a { color: var(--muted); font-size: 10px; letter-spacing: .06em; text-decoration: none; text-transform: lowercase; transition: color .2s ease; }
+aside a:hover, aside a:focus-visible { color: var(--white); }
+.dates { min-width: 0; }
+.date-group { border-top: 1px solid var(--line); padding: 13px 0 clamp(48px, 7vw, 96px); scroll-margin-top: 12px; }
+.date-group h2 { font-size: 10px; font-weight: 500; letter-spacing: .07em; margin: 0 0 16px; text-transform: lowercase; }
+.photo-grid { column-count: 3; column-gap: clamp(5px, .65vw, 10px); }
+.photo-grid button { background: #111; border: 0; break-inside: avoid; cursor: zoom-in; display: block; margin: 0 0 clamp(5px, .65vw, 10px); padding: 0; width: 100%; }
+.photo-grid img { display: block; height: auto; opacity: 1; transition: opacity .25s ease; width: 100%; }
+.photo-grid button:hover img { opacity: .86; }
+.lightbox { align-items: center; background: rgba(0, 0, 0, .985); display: flex; inset: 0; justify-content: center; padding: 28px 70px; position: fixed; touch-action: pan-y; z-index: 10; }
+.lightbox img { display: block; height: auto; max-height: calc(100vh - 40px); max-width: calc(100vw - 140px); object-fit: contain; width: auto; }
+.lightbox button { background: transparent; border: 0; color: #aaa; cursor: pointer; position: absolute; transition: color .2s ease; z-index: 2; }
+.lightbox button:hover { color: #fff; }
+.close { font-size: 34px; font-weight: 200; height: 52px; line-height: 1; padding: 8px; right: 8px; top: 4px; width: 52px; z-index: 4 !important; }
+.previous, .next { font-family: Georgia, serif; font-size: 54px; height: 100%; top: 0; width: 62px; }
+.previous { left: 0; }.next { right: 0; }
+
+@media (max-width: 900px) { .photo-grid { column-count: 2; } }
+@media (max-width: 640px) {
+  header { height: 62px; }
+  .timeline { display: block; }
+  aside { background: var(--black); height: 39px; overflow-x: auto; position: sticky; top: 0; z-index: 3; }
+  aside nav { flex-direction: row; gap: 20px; padding: 13px 0 10px; position: static; width: max-content; }
+  .date-group { scroll-margin-top: 39px; }
+  .photo-grid { column-count: 1; }
+  .lightbox { padding: 12px 36px; }
+  .lightbox img { max-height: calc(100vh - 24px); max-width: calc(100vw - 72px); }
+  .previous, .next { font-size: 42px; width: 36px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .photo-grid img { transition: none; } }

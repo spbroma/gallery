@@ -1,0 +1,6 @@
+{
+  "publishing": {
+    "albumAllowlist": ["2026/06-28 - Pride, Augsburg", "2026/07-05 - Tollwood, Rain, Street Guitar", "2026/08-21 - Florence"],
+    "maxPhotosPerAlbum": 12
+  }
+}
