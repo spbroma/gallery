@@ -32,6 +32,7 @@ yarn-error.log*
 .env*
 
 # deployment and generated files
+.openai/
 .vercel
 next-env.d.ts
 /dist/
