@@ -1,5 +1,6 @@
 # dependencies
 /node_modules
+/.venv-analysis/
 /.pnp
 .pnp.*
 .yarn/*
@@ -39,3 +40,5 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+/data/.analysis-checkpoint.jsonl
+/data/photo-library.json

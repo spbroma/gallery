@@ -10,9 +10,10 @@
     "build": "vinext build",
     "build:pages": "next build",
     "start": "vinext start",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .venv-analysis",
     "gallery:publish": "python3 scripts/publish.py",
-    "gallery:preview": "python3 scripts/publish.py --overlay config/gallery.preview.json"
+    "gallery:preview": "python3 scripts/publish.py --overlay config/gallery.preview.json",
+    "gallery:analyze": ".venv-analysis/bin/python scripts/analyze_library.py"
   },
   "dependencies": {
     "next": "16.2.6",

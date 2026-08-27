@@ -1,0 +1,19 @@
+{
+  "analysisVersion": 4,
+  "galleryData": "public/data/gallery.json",
+  "imageRoot": "public",
+  "outputFile": "data/photo-library.json",
+  "publicIndexFile": "public/data/photo-filters.json",
+  "checkpointFile": "data/.analysis-checkpoint.jsonl",
+  "ollama": {
+    "baseUrl": "http://127.0.0.1:11434",
+    "model": "gemma4:latest",
+    "promptVersion": 2,
+    "timeoutSeconds": 45,
+    "retries": 2
+  },
+  "embeddings": {
+    "model": "google/siglip2-base-patch16-256",
+    "device": "mps"
+  }
+}

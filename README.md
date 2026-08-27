@@ -28,3 +28,15 @@
 Запись без `files` исключает папку целиком со всем содержимым. Запись с `files` исключает только перечисленные файлы; имена сопоставляются без учёта регистра.
 
 Frontend не зависит от хранилища: он читает URL из `public/data/gallery.json`. Граница адаптера Google Drive уже есть в `scripts/storage/google_drive.py`; сейчас она намеренно не выполняет загрузку. Для подключения Drive нужно реализовать upload/mirror sync, заполнить `storage.googleDrive` в конфиге и переключить `storage.provider` на `googleDrive`.
+
+## Локальный анализ библиотеки
+
+`scripts/analyze_library.py` строит возобновляемую локальную разметку опубликованных WebP-копий: фиксированные теги и масштаб кадра через Ollama/Gemma, числовые характеристики цвета и света, средний HSV/RGB крупнейшего цветового кластера через OpenCV, а также нормализованный визуальный embedding SigLIP 2. Полный результат сохраняется только локально в `data/photo-library.json`, а облегчённый индекс для фильтров без описаний и эмбеддингов — в `public/data/photo-filters.json`; оба локальных служебных файла не коммитятся.
+
+```bash
+uv venv .venv-analysis --python 3.12
+uv pip install --python .venv-analysis/bin/python -r requirements-analysis.txt
+npm run gallery:analyze
+```
+
+Пути, модели и адрес Ollama задаются в `config/analysis.config.json`. Повторный запуск пропускает изображения с тем же SHA-256, моделью и версией промпта; `--force` пересчитывает всё.
