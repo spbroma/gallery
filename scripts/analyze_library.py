@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
+import io
 import json
 import time
 import urllib.request
@@ -16,6 +17,8 @@ import numpy as np
 import torch
 from PIL import Image
 from transformers import AutoModel, AutoProcessor
+
+from archive_metadata import discover_shoots, image_files, metadata_path, photo_id, read_json as read_sidecar, sha256 as source_sha256, slugify, write_json_atomic
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -175,6 +178,11 @@ def analyze_with_ollama(path: Path, config: dict[str, Any]) -> dict[str, Any]:
         "occluded, or the scene is crowded. Do not infer identity, gender, ethnicity, exact age, health, politics, "
         "religion, profession, relationships, or exact location. Return one short factual English description."
     )
+    with Image.open(path) as source_image:
+        model_image = source_image.convert("RGB")
+        model_image.thumbnail((int(config["inputMaxEdge"]), int(config["inputMaxEdge"])))
+        buffer = io.BytesIO()
+        model_image.save(buffer, format="JPEG", quality=88, optimize=True)
     payload = {
         "model": ollama["model"],
         "stream": False,
@@ -184,7 +192,7 @@ def analyze_with_ollama(path: Path, config: dict[str, Any]) -> dict[str, Any]:
         "messages": [{
             "role": "user",
             "content": prompt,
-            "images": [base64.b64encode(path.read_bytes()).decode("ascii")],
+            "images": [base64.b64encode(buffer.getvalue()).decode("ascii")],
         }],
     }
     request = urllib.request.Request(
@@ -259,23 +267,33 @@ def load_checkpoint(path: Path) -> dict[str, dict[str, Any]]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate local tags, visual metrics, and SigLIP embeddings")
+    parser = argparse.ArgumentParser(description="Generate per-photo archive metadata with local models")
     parser.add_argument("--config", default="config/analysis.config.json")
+    parser.add_argument("--source", help="Analyze only this exact numeric source folder")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
 
     config = read_json(resolve_path(args.config))
-    gallery = read_json(resolve_path(config["galleryData"]))
-    photos = gallery["photos"][:args.limit] if args.limit else gallery["photos"]
-    image_root = resolve_path(config["imageRoot"])
-    output = resolve_path(config["outputFile"])
-    public_index = resolve_path(config["publicIndexFile"])
-    checkpoint = resolve_path(config["checkpointFile"])
-    output.parent.mkdir(parents=True, exist_ok=True)
-    public_index.parent.mkdir(parents=True, exist_ok=True)
-    checkpoint.parent.mkdir(parents=True, exist_ok=True)
-    existing = {} if args.force else load_checkpoint(checkpoint)
+    archive = resolve_path(config["archiveRoot"])
+    all_tasks = [
+        (shoot, source, image)
+        for shoot, source in discover_shoots(archive)
+        for image in image_files(source)
+    ]
+    if args.source:
+        source = Path(args.source).expanduser().resolve()
+        if not source.is_dir() or not source.name.isdigit():
+            raise SystemExit("--source must point to a numeric photo folder such as .../shoot/2")
+        shoot = source.parent
+        try:
+            shoot.relative_to(archive)
+        except ValueError as error:
+            raise SystemExit(f"Source folder is outside archiveRoot: {source}") from error
+        tasks = [(shoot, source, image) for image in image_files(source)]
+    else:
+        tasks = all_tasks
+    selected_tasks = tasks[:args.limit] if args.limit else tasks
 
     embedding_config = config["embeddings"]
     expected_models = {
@@ -286,49 +304,39 @@ def main() -> None:
     }
     embedder: ImageEmbedder | None = None
 
-    ordered_keys: list[str] = []
-    records = dict(existing)
-    for index, photo in enumerate(photos, start=1):
-        key = f"{photo['albumId']}/{photo['id']}"
-        ordered_keys.append(key)
-        path = image_root / photo["src"].lstrip("/")
-        if not path.is_file():
-            raise FileNotFoundError(path)
-        digest = sha256(path)
-        cached = records.get(key)
-        cached_models = cached.get("models", {}) if cached else {}
+    for index, (shoot, source, image) in enumerate(selected_tasks, start=1):
+        relative = shoot.relative_to(archive).as_posix()
+        key = f"{slugify(relative)}/{photo_id(image)}"
+        sidecar_path = metadata_path(shoot, image)
+        document = read_sidecar(sidecar_path)
+        analysis = document.get("analysis", {})
+        digest = source_sha256(image)
+        cached_models = analysis.get("models", {})
         core_is_current = bool(
-            cached
-            and "error" not in cached.get("semantic", {})
-            and cached.get("sha256") == digest
+            document
+            and analysis.get("status") == "ready"
+            and "error" not in analysis.get("semantic", {})
+            and document.get("source", {}).get("sha256") == digest
             and cached_models.get("tags") == expected_models["tags"]
             and cached_models.get("embedding") == expected_models["embedding"]
             and cached_models.get("promptVersion") == expected_models["promptVersion"]
+            and cached_models.get("metricsVersion") == expected_models["metricsVersion"]
+            and analysis.get("inputMaxEdge") == config["inputMaxEdge"]
         )
-        if core_is_current:
-            if cached_models.get("metricsVersion") != expected_models["metricsVersion"]:
-                with Image.open(path) as image:
-                    cached["visual"] = image_metrics(image)
-                cached["models"] = expected_models
-                cached["tags"] = computed_tags(cached["visual"], cached["semantic"])
-                records[key] = cached
-                with checkpoint.open("a", encoding="utf-8") as handle:
-                    handle.write(json.dumps(cached, ensure_ascii=False, separators=(",", ":")) + "\n")
-                print(f"[{index}/{len(photos)}] refreshed metrics {key}", flush=True)
-            else:
-                print(f"[{index}/{len(photos)}] cached {key}", flush=True)
+        if core_is_current and not args.force:
+            print(f"[{index}/{len(selected_tasks)}] cached {key}", flush=True)
             continue
 
         started = time.monotonic()
-        with Image.open(path) as image:
-            metrics = image_metrics(image)
+        with Image.open(image) as opened_image:
+            metrics = image_metrics(opened_image)
             if embedder is None:
                 print(f"Loading {embedding_config['model']}…", flush=True)
                 embedder = ImageEmbedder(embedding_config["model"], embedding_config.get("device", "mps"))
                 print(f"Embedding device: {embedder.device}", flush=True)
-            embedding = embedder.encode(image)
+            embedding = embedder.encode(opened_image)
         try:
-            semantic = analyze_with_ollama(path, config)
+            semantic = analyze_with_ollama(image, config)
         except RuntimeError as error:
             semantic = {
                 "description": "",
@@ -339,66 +347,33 @@ def main() -> None:
                 "composition_tags": [],
                 "error": str(error),
             }
-        record = {
-            "key": key,
-            "id": photo["id"],
-            "albumId": photo["albumId"],
-            "src": photo["src"],
-            "date": photo["date"],
+        document.setdefault("schemaVersion", 1)
+        document["id"] = photo_id(image)
+        document["source"] = {
+            "path": image.relative_to(shoot).as_posix(),
+            "tier": int(source.name),
             "sha256": digest,
+            "size": image.stat().st_size,
+            "mtimeNs": image.stat().st_mtime_ns,
+        }
+        document["analysis"] = {
+            "status": "error" if "error" in semantic else "ready",
             "models": expected_models,
-            "visual": metrics,
+            "inputMaxEdge": config["inputMaxEdge"],
+            "generatedAt": datetime.now(timezone.utc).isoformat(),
+            "description": semantic.get("description", ""),
             "semantic": semantic,
-            "tags": computed_tags(metrics, semantic),
+            "visual": metrics,
             "embedding": embedding,
         }
-        records[key] = record
-        with checkpoint.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
-        print(f"[{index}/{len(photos)}] {key} ({time.monotonic() - started:.1f}s)", flush=True)
+        document.setdefault("tags", {})["generated"] = computed_tags(metrics, semantic)
+        document["tags"].setdefault("manual", [])
+        document.setdefault("publication", {"published": False})
+        document.setdefault("editorial", {})
+        write_json_atomic(sidecar_path, document)
+        print(f"[{index}/{len(selected_tasks)}] {key} ({time.monotonic() - started:.1f}s)", flush=True)
 
-    final_records = [records[key] for key in ordered_keys if key in records]
-    document = {
-        "version": 1,
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
-        "models": {
-            "tags": config["ollama"]["model"],
-            "embedding": embedding_config["model"],
-            "promptVersion": config["ollama"]["promptVersion"],
-            "metricsVersion": config["analysisVersion"],
-            "embeddingDimensions": len(final_records[0]["embedding"]) if final_records else 0,
-        },
-        "photos": final_records,
-    }
-    output.write_text(json.dumps(document, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-    print(f"Wrote {len(final_records)} records to {output}", flush=True)
-
-    public_document = {
-        "version": document["version"],
-        "generatedAt": document["generatedAt"],
-        "photos": [
-            {
-                "key": record["key"],
-                "id": record["id"],
-                "albumId": record["albumId"],
-                "date": record["date"],
-                "visual": record["visual"],
-                "semantic": {
-                    "shot_scale": record["semantic"]["shot_scale"],
-                    "people_count": record["semantic"]["people_count"],
-                    "semantic_tags": record["semantic"]["semantic_tags"],
-                    "composition_tags": record["semantic"]["composition_tags"],
-                },
-                "tags": record["tags"],
-            }
-            for record in final_records
-        ],
-    }
-    public_index.write_text(
-        json.dumps(public_document, ensure_ascii=False, separators=(",", ":")) + "\n",
-        encoding="utf-8",
-    )
-    print(f"Wrote compact public index to {public_index}", flush=True)
+    print(f"Updated sidecar metadata for {len(selected_tasks)} photos in {archive}", flush=True)
 
 
 if __name__ == "__main__":

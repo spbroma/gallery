@@ -2,6 +2,7 @@
   "archiveRoot": "~/Pictures/PhotoArchive",
   "outputRoot": "public/gallery",
   "dataFile": "public/data/gallery.json",
+  "filtersFile": "public/data/photo-filters.json",
   "publicBaseUrl": "/gallery",
   "processing": { "webMaxEdge": 2200, "thumbMaxEdge": 900, "webQuality": 84, "thumbQuality": 78, "formats": [".jpg", ".jpeg", ".png", ".tif", ".tiff"] },
   "publishing": { "blackFolderSuffix": "_black", "exclusionsFile": "config/gallery.exclusions.json", "albumAllowlist": [], "maxPhotosPerAlbum": null },

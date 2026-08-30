@@ -1,0 +1,9 @@
+{
+  "galleryRepo": "~/work/photo-gallery-site",
+  "archiveRoot": "~/Pictures/PhotoArchive",
+  "makeSquareCommand": "make_square",
+  "analysisPython": ".venv-analysis/bin/python",
+  "gitRemote": "origin",
+  "gitBranch": "main",
+  "commitMessageTemplate": "Publish {shoot}"
+}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>photo archive admin</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header>
+    <h1>photo archive</h1>
+    <div class="header-state"><span id="result-count">loading</span><span class="status-dot"></span>local</div>
+  </header>
+  <main>
+    <aside>
+      <div class="aside-title">shoots</div>
+      <nav id="shoots"></nav>
+    </aside>
+    <section class="library">
+      <div class="toolbar">
+        <div>
+          <h2 id="shoot-title">select a shoot</h2>
+          <p id="shoot-meta"></p>
+        </div>
+        <div class="toolbar-actions">
+          <label><span>show</span><select id="visibility-filter"><option value="all">all photos</option><option value="published">published</option><option value="hidden">not published</option></select></label>
+          <input id="tag-filter" type="search" placeholder="filter tags" aria-label="Filter tags">
+        </div>
+      </div>
+      <div id="empty" class="empty">choose a shoot from the left</div>
+      <div id="grid" class="photo-grid" aria-live="polite"></div>
+    </section>
+  </main>
+  <template id="photo-template">
+    <button class="photo-card" type="button">
+      <div class="photo-wrap"><img alt="" loading="lazy"><span class="publish-state"></span></div>
+      <div class="photo-info">
+        <div class="photo-name"></div>
+        <div class="tag-list"></div>
+      </div>
+    </button>
+  </template>
+  <dialog id="editor">
+    <form method="dialog" id="editor-form">
+      <div class="editor-topbar"><div><span class="eyebrow">edit photo</span><h2 id="editor-name"></h2></div><button class="icon-button" value="cancel" aria-label="Close">×</button></div>
+      <div class="editor-layout">
+        <div class="editor-image"><img id="editor-image" alt=""></div>
+        <div class="editor-fields">
+          <label class="publish-toggle"><input id="editor-published" type="checkbox"><span>published on site</span></label>
+          <label class="field"><span>description</span><textarea id="editor-description" rows="3"></textarea></label>
+          <div class="field-row">
+            <label class="field"><span>framing</span><select id="editor-shot"><option value="unknown">unknown</option><option value="detail">detail</option><option value="extreme-close-up">extreme close up</option><option value="close-up">close up</option><option value="medium">medium</option><option value="wide">wide</option><option value="extreme-wide">extreme wide</option></select></label>
+            <label class="field"><span>people</span><input id="editor-people" type="number" min="0" max="100"></label>
+          </div>
+          <div class="tag-editor"><div class="field-heading"><span>manual tags</span><button id="promote-all" type="button">make all manual</button></div><div id="manual-tags" class="editable-tags"></div></div>
+          <div class="add-tag"><input id="new-tag" placeholder="new manual tag"><button id="add-tag" type="button">add</button></div>
+          <div class="tag-editor"><div class="field-heading"><span>generated tags</span><small>click to make manual</small></div><div id="generated-tags" class="editable-tags generated"></div></div>
+        </div>
+      </div>
+      <div class="editor-actions"><span id="save-status"></span><button class="secondary" value="cancel">cancel</button><button id="save-photo" type="button">save changes</button></div>
+    </form>
+  </dialog>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

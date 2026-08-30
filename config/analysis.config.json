@@ -1,10 +1,7 @@
 {
   "analysisVersion": 4,
-  "galleryData": "public/data/gallery.json",
-  "imageRoot": "public",
-  "outputFile": "data/photo-library.json",
-  "publicIndexFile": "public/data/photo-filters.json",
-  "checkpointFile": "data/.analysis-checkpoint.jsonl",
+  "archiveRoot": "~/Pictures/PhotoArchive",
+  "inputMaxEdge": 1000,
   "ollama": {
     "baseUrl": "http://127.0.0.1:11434",
     "model": "gemma4:latest",

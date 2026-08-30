@@ -85,7 +85,7 @@ export default function Home() {
   const tagOptions = useMemo(() => {
     const counts = new Map<string, number>();
     photos.forEach(({ metadata }) => {
-      [...metadata.semantic.semantic_tags, ...metadata.semantic.composition_tags].forEach((tag) => {
+      metadata.tags.forEach((tag) => {
         if (!hiddenTags.has(tag)) counts.set(tag, (counts.get(tag) ?? 0) + 1);
       });
     });
@@ -97,8 +97,7 @@ export default function Home() {
       const shotMatch = selectedShots.length === 0 || selectedShots.includes(metadata.semantic.shot_scale);
       const peopleMatch = selectedPeople.length === 0 || selectedPeople.includes(peopleGroup(metadata.semantic.people_count));
       const colorMatch = selectedColors.length === 0 || selectedColors.some((color) => (metadata.visual.colorProfile[color] ?? 0) >= 0.08);
-      const sourceTags = [...metadata.semantic.semantic_tags, ...metadata.semantic.composition_tags];
-      const tagMatch = selectedTags.length === 0 || selectedTags.some((tag) => sourceTags.includes(tag));
+      const tagMatch = selectedTags.length === 0 || selectedTags.some((tag) => metadata.tags.includes(tag));
       return shotMatch && peopleMatch && colorMatch && tagMatch;
     });
 
