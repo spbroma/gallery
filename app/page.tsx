@@ -9,14 +9,11 @@ type Visual = {
   brightness: number;
   dominantAverageColor: { hsv: { h: number; s: number; v: number } };
 };
-type Semantic = {
-  people_count: number;
-};
-type PhotoMetadata = { key: string; id: string; albumId: string; date: string; visual: Visual; semantic: Semantic };
+type PhotoMetadata = { key: string; id: string; albumId: string; date: string; visual: Visual };
 type FilterIndex = { photos: PhotoMetadata[] };
 type LibraryPhoto = Photo & { metadata: PhotoMetadata };
 type IndexedPhoto = { photo: LibraryPhoto; index: number };
-type Mode = 'date' | 'light' | 'color' | 'people';
+type Mode = 'date' | 'light' | 'color';
 type Direction = 'asc' | 'desc';
 type MobileView = 'feed' | 'grid';
 
@@ -31,8 +28,7 @@ function dateLabel(date: string) {
 function directionLabel(mode: Mode, direction: Direction) {
   if (mode === 'date') return direction === 'asc' ? 'oldest first' : 'newest first';
   if (mode === 'light') return direction === 'asc' ? 'dark to light' : 'light to dark';
-  if (mode === 'color') return direction === 'asc' ? 'hue ascending' : 'hue descending';
-  return direction === 'asc' ? 'few to many people' : 'many to few people';
+  return direction === 'asc' ? 'hue ascending' : 'hue descending';
 }
 
 function compareColor(a: LibraryPhoto, b: LibraryPhoto) {
@@ -45,12 +41,25 @@ function compareColor(a: LibraryPhoto, b: LibraryPhoto) {
   return first.h - second.h || second.s - first.s;
 }
 
+function navigatorSegmentStyle(photo: LibraryPhoto, mode: Exclude<Mode, 'date'>) {
+  if (mode === 'light') {
+    const lightness = Math.round(photo.metadata.visual.brightness * 100);
+    return { background: `hsl(0 0% ${lightness}%)` };
+  }
+  if (mode === 'color') {
+    const { h, s, v } = photo.metadata.visual.dominantAverageColor.hsv;
+    if (s < 0.12) return { background: `hsl(0 0% ${Math.round(v * 100)}%)` };
+    return { background: `hsl(${h} ${Math.round(s * 100)}% ${Math.round(Math.max(0.18, v) * 60)}%)` };
+  }
+}
+
 export default function Home() {
   const [photos, setPhotos] = useState<LibraryPhoto[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [mode, setMode] = useState<Mode>('date');
   const [direction, setDirection] = useState<Direction>('desc');
   const [mobileView, setMobileView] = useState<MobileView>('grid');
+  const [navigatorOrder, setNavigatorOrder] = useState<number[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
@@ -85,14 +94,63 @@ export default function Home() {
       let comparison = 0;
       if (mode === 'date') comparison = a.date.localeCompare(b.date);
       else if (mode === 'light') comparison = a.metadata.visual.brightness - b.metadata.visual.brightness;
-      else if (mode === 'color') comparison = compareColor(a, b);
-      else comparison = a.metadata.semantic.people_count - b.metadata.semantic.people_count;
+      else comparison = compareColor(a, b);
       if (comparison === 0) comparison = a.date.localeCompare(b.date) || a.id.localeCompare(b.id);
       return direction === 'asc' ? comparison : -comparison;
     });
   }, [photos, mode, direction]);
 
   const activePhoto = activeIndex === null ? null : sortedPhotos[activeIndex];
+
+  useEffect(() => {
+    if (mode === 'date') return;
+    const container = document.querySelector<HTMLElement>('.sorted-results');
+    if (!container) return;
+    let frame = 0;
+    const measure = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const remaining = [...container.querySelectorAll<HTMLElement>('[data-photo-index]')]
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            return {
+              index: Number(element.dataset.photoIndex),
+              left: rect.left,
+              top: rect.top + window.scrollY,
+            };
+          })
+          .sort((a, b) => a.top - b.top || a.left - b.left);
+        const visualOrder: number[] = [];
+        while (remaining.length > 0) {
+          const rowTop = remaining[0].top;
+          const row = remaining.filter((item) => item.top - rowTop <= 24);
+          remaining.splice(0, row.length);
+          row.sort((a, b) => a.left - b.left || a.top - b.top);
+          visualOrder.push(...row.map((item) => item.index));
+        }
+        setNavigatorOrder((current) => (
+          current.length === visualOrder.length && current.every((value, index) => value === visualOrder[index])
+            ? current
+            : visualOrder
+        ));
+      });
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    container.addEventListener('load', measure, true);
+    window.addEventListener('resize', measure);
+    measure();
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+      container.removeEventListener('load', measure, true);
+      window.removeEventListener('resize', measure);
+    };
+  }, [mode, sortedPhotos, mobileView]);
+
+  const visualNavigatorOrder = navigatorOrder.length === sortedPhotos.length
+    ? navigatorOrder
+    : sortedPhotos.map((_, index) => index);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -150,10 +208,20 @@ export default function Home() {
     window.localStorage.setItem('roma-photos-mobile-view', view);
   };
 
+  const navigateFromStrip = (clientY: number, target: HTMLButtonElement) => {
+    const track = target.querySelector<HTMLElement>('.mode-navigator-track');
+    if (!track || sortedPhotos.length === 0) return;
+    const rect = track.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(0.9999, (clientY - rect.top) / rect.height));
+    const position = Math.floor(ratio * visualNavigatorOrder.length);
+    const photoIndex = visualNavigatorOrder[position];
+    document.querySelector<HTMLElement>(`[data-photo-index="${photoIndex}"]`)?.scrollIntoView({ block: 'center' });
+  };
+
   const renderPhotos = (items: IndexedPhoto[]) => (
     <div className="photo-grid">
       {items.map(({ photo, index }) => (
-        <button key={`${photo.albumId}-${photo.id}`} type="button" aria-label="Open photo" onClick={() => { setActiveIndex(index); setLightboxControls(false); }}>
+        <button key={`${photo.albumId}-${photo.id}`} type="button" data-photo-index={index} aria-label="Open photo" onClick={() => { setActiveIndex(index); setLightboxControls(false); }}>
           <img src={`${basePath}${photo.thumb}`} alt="" loading="lazy" />
         </button>
       ))}
@@ -176,7 +244,6 @@ export default function Home() {
               <option value="date">date</option>
               <option value="light">light</option>
               <option value="color">color</option>
-              <option value="people">people</option>
             </select>
           </label>
           <button className="direction-toggle" type="button" aria-label={directionLabel(mode, direction)} title={directionLabel(mode, direction)} onClick={() => setDirection((current) => current === 'asc' ? 'desc' : 'asc')}>
@@ -201,10 +268,34 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <section className="sorted-results">
-          {renderPhotos(sortedPhotos.map((photo, index) => ({ photo, index })))}
-          {loaded && sortedPhotos.length === 0 && <p className="empty-state">no photos</p>}
-        </section>
+        <>
+          <section className="sorted-results">
+            {renderPhotos(sortedPhotos.map((photo, index) => ({ photo, index })))}
+            {loaded && sortedPhotos.length === 0 && <p className="empty-state">no photos</p>}
+          </section>
+          {sortedPhotos.length > 0 && (
+            <button
+              className="mode-navigator"
+              type="button"
+              aria-label={`Navigate ${mode} order`}
+              title={`Navigate ${mode} order`}
+              onPointerDown={(event) => {
+                event.currentTarget.setPointerCapture(event.pointerId);
+                navigateFromStrip(event.clientY, event.currentTarget);
+              }}
+              onPointerMove={(event) => {
+                if (event.currentTarget.hasPointerCapture(event.pointerId)) navigateFromStrip(event.clientY, event.currentTarget);
+              }}
+            >
+              <span className="mode-navigator-track" aria-hidden="true">
+                {visualNavigatorOrder.map((photoIndex) => {
+                  const photo = sortedPhotos[photoIndex];
+                  return <span key={`${photo.albumId}-${photo.id}`} data-photo-index={photoIndex} style={navigatorSegmentStyle(photo, mode)} />;
+                })}
+              </span>
+            </button>
+          )}
+        </>
       )}
 
       {activePhoto && (
