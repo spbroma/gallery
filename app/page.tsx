@@ -22,6 +22,7 @@ type FilterIndex = { photos: PhotoMetadata[] };
 type LibraryPhoto = Photo & { metadata: PhotoMetadata };
 type IndexedPhoto = { photo: LibraryPhoto; index: number };
 type SortMode = 'date-desc' | 'date-asc' | 'dark-light' | 'light-dark' | 'muted-vivid' | 'vivid-muted' | 'hue' | 'people-asc' | 'people-desc';
+type MobileView = 'feed' | 'grid';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -63,8 +64,11 @@ export default function Home() {
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [mobileView, setMobileView] = useState<MobileView>('feed');
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
+  const suppressTap = useRef(false);
 
   useEffect(() => {
     Promise.all([
@@ -80,6 +84,13 @@ export default function Home() {
       })
       .catch(() => setPhotos([]))
       .finally(() => setLoaded(true));
+  }, []);
+
+  useEffect(() => {
+    const savedView = window.localStorage.getItem('roma-photos-mobile-view');
+    if (savedView !== 'feed' && savedView !== 'grid') return;
+    const frame = window.requestAnimationFrame(() => setMobileView(savedView));
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const tagOptions = useMemo(() => {
@@ -156,14 +167,35 @@ export default function Home() {
   const onTouchEnd = (event: React.TouchEvent) => {
     if (touchStart.current === null) return;
     const distance = event.changedTouches[0].clientX - touchStart.current;
-    if (Math.abs(distance) > 45) move(distance < 0 ? 1 : -1);
+    if (Math.abs(distance) > 45) {
+      suppressTap.current = true;
+      window.setTimeout(() => { suppressTap.current = false; }, 350);
+      move(distance < 0 ? 1 : -1);
+    }
     touchStart.current = null;
+  };
+
+  const onLightboxTap = () => {
+    if (suppressTap.current) {
+      suppressTap.current = false;
+      return;
+    }
+    if (window.matchMedia('(max-width: 640px)').matches) {
+      setLightboxControls((visible) => !visible);
+    } else {
+      setActiveIndex(null);
+    }
+  };
+
+  const selectMobileView = (view: MobileView) => {
+    setMobileView(view);
+    window.localStorage.setItem('roma-photos-mobile-view', view);
   };
 
   const renderPhotos = (items: IndexedPhoto[]) => (
     <div className="photo-grid">
       {items.map(({ photo, index }) => (
-        <button key={`${photo.albumId}-${photo.id}`} type="button" aria-label="Open photo" onClick={() => setActiveIndex(index)}>
+        <button key={`${photo.albumId}-${photo.id}`} type="button" aria-label="Open photo" onClick={() => { setActiveIndex(index); setLightboxControls(false); }}>
           <img src={`${basePath}${photo.thumb}`} alt="" loading="lazy" />
         </button>
       ))}
@@ -171,11 +203,15 @@ export default function Home() {
   );
 
   return (
-    <main>
+    <main className={`mobile-view-${mobileView}`}>
       <header>
         <h1>roma&apos;s photos</h1>
         <div className="library-controls">
           <span className="result-count">{loaded ? `${filteredPhotos.length} photos` : 'loading'}</span>
+          <div className="view-toggle" role="group" aria-label="Photo layout">
+            <button type="button" aria-pressed={mobileView === 'feed'} onClick={() => selectMobileView('feed')}>feed</button>
+            <button type="button" aria-pressed={mobileView === 'grid'} onClick={() => selectMobileView('grid')}>grid</button>
+          </div>
           <label className="sort-control">
             <span>sort</span>
             <select value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)}>
@@ -251,10 +287,13 @@ export default function Home() {
       )}
 
       {activePhoto && (
-        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={() => setActiveIndex(null)} onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={onTouchEnd}>
+        <div className={`lightbox${lightboxControls ? ' controls-visible' : ''}`} role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onLightboxTap} onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={onTouchEnd}>
           <button className="close" type="button" aria-label="Close" onClick={(event) => { event.stopPropagation(); setActiveIndex(null); }}>×</button>
           <button className="previous" type="button" aria-label="Previous photo" onClick={(event) => { event.stopPropagation(); move(-1); }}>‹</button>
-          <img src={`${basePath}${activePhoto.src}`} alt="" onClick={(event) => event.stopPropagation()} />
+          <img src={`${basePath}${activePhoto.src}`} alt="" onClick={(event) => {
+            event.stopPropagation();
+            if (window.matchMedia('(max-width: 640px)').matches) onLightboxTap();
+          }} />
           <button className="next" type="button" aria-label="Next photo" onClick={(event) => { event.stopPropagation(); move(1); }}>›</button>
         </div>
       )}
