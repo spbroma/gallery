@@ -7,64 +7,50 @@ type Photo = { id: string; albumId: string; src: string; thumb: string; date: st
 type Gallery = { photos: Photo[] };
 type Visual = {
   brightness: number;
-  colorfulness: number;
-  colorProfile: Record<string, number>;
   dominantAverageColor: { hsv: { h: number; s: number; v: number } };
 };
 type Semantic = {
-  shot_scale: string;
   people_count: number;
-  semantic_tags: string[];
-  composition_tags: string[];
 };
-type PhotoMetadata = { key: string; id: string; albumId: string; date: string; visual: Visual; semantic: Semantic; tags: string[] };
+type PhotoMetadata = { key: string; id: string; albumId: string; date: string; visual: Visual; semantic: Semantic };
 type FilterIndex = { photos: PhotoMetadata[] };
 type LibraryPhoto = Photo & { metadata: PhotoMetadata };
 type IndexedPhoto = { photo: LibraryPhoto; index: number };
-type SortMode = 'date-desc' | 'date-asc' | 'dark-light' | 'light-dark' | 'muted-vivid' | 'vivid-muted' | 'hue' | 'people-asc' | 'people-desc';
+type Mode = 'date' | 'light' | 'color' | 'people';
+type Direction = 'asc' | 'desc';
 type MobileView = 'feed' | 'grid';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-const shotScales = ['detail', 'extreme-close-up', 'close-up', 'medium', 'wide', 'extreme-wide'];
-const peopleGroups = ['none', 'one', 'small-group', 'crowd'];
-const colors = ['black', 'white', 'gray', 'red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink', 'brown'];
-const colorHex: Record<string, string> = {
-  black: '#111', white: '#f4f4f0', gray: '#777', red: '#db3232', orange: '#df7628', yellow: '#e0c43a',
-  green: '#4f9e55', teal: '#3c9991', blue: '#3976bd', purple: '#7956a8', pink: '#c56d91', brown: '#77513d',
-};
-const hiddenTags = new Set([...shotScales, 'unknown', 'no-people', 'one-person', 'small-group', 'crowd', ...colors, 'dark', 'bright', 'mid-brightness', 'muted', 'vivid', 'balanced-color', 'people', 'group']);
 
 function dateLabel(date: string) {
   const [year, month, day] = date.split('-').map(Number);
   return `${monthNames[month - 1]} ${day}, ${year}`;
 }
 
-function label(value: string) {
-  return value.replaceAll('-', ' ');
+function directionLabel(mode: Mode, direction: Direction) {
+  if (mode === 'date') return direction === 'asc' ? 'oldest first' : 'newest first';
+  if (mode === 'light') return direction === 'asc' ? 'dark to light' : 'light to dark';
+  if (mode === 'color') return direction === 'asc' ? 'hue ascending' : 'hue descending';
+  return direction === 'asc' ? 'few to many people' : 'many to few people';
 }
 
-function peopleGroup(count: number) {
-  if (count === 0) return 'none';
-  if (count === 1) return 'one';
-  if (count <= 5) return 'small-group';
-  return 'crowd';
-}
-
-function toggle(items: string[], value: string) {
-  return items.includes(value) ? items.filter((item) => item !== value) : [...items, value];
+function compareColor(a: LibraryPhoto, b: LibraryPhoto) {
+  const first = a.metadata.visual.dominantAverageColor.hsv;
+  const second = b.metadata.visual.dominantAverageColor.hsv;
+  const firstNeutral = first.s < 0.12;
+  const secondNeutral = second.s < 0.12;
+  if (firstNeutral !== secondNeutral) return firstNeutral ? -1 : 1;
+  if (firstNeutral) return first.v - second.v;
+  return first.h - second.h || second.s - first.s;
 }
 
 export default function Home() {
   const [photos, setPhotos] = useState<LibraryPhoto[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [sortMode, setSortMode] = useState<SortMode>('date-desc');
-  const [selectedShots, setSelectedShots] = useState<string[]>([]);
-  const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [mobileView, setMobileView] = useState<MobileView>('feed');
+  const [mode, setMode] = useState<Mode>('date');
+  const [direction, setDirection] = useState<Direction>('desc');
+  const [mobileView, setMobileView] = useState<MobileView>('grid');
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
@@ -93,56 +79,35 @@ export default function Home() {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  const tagOptions = useMemo(() => {
-    const counts = new Map<string, number>();
-    photos.forEach(({ metadata }) => {
-      metadata.tags.forEach((tag) => {
-        if (!hiddenTags.has(tag)) counts.set(tag, (counts.get(tag) ?? 0) + 1);
-      });
-    });
-    return [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  }, [photos]);
-
-  const filteredPhotos = useMemo(() => {
-    const result = photos.filter(({ metadata }) => {
-      const shotMatch = selectedShots.length === 0 || selectedShots.includes(metadata.semantic.shot_scale);
-      const peopleMatch = selectedPeople.length === 0 || selectedPeople.includes(peopleGroup(metadata.semantic.people_count));
-      const colorMatch = selectedColors.length === 0 || selectedColors.some((color) => (metadata.visual.colorProfile[color] ?? 0) >= 0.08);
-      const tagMatch = selectedTags.length === 0 || selectedTags.some((tag) => metadata.tags.includes(tag));
-      return shotMatch && peopleMatch && colorMatch && tagMatch;
-    });
-
+  const sortedPhotos = useMemo(() => {
+    const result = [...photos];
     return result.sort((a, b) => {
-      if (sortMode === 'date-asc') return a.date.localeCompare(b.date);
-      if (sortMode === 'date-desc') return b.date.localeCompare(a.date);
-      if (sortMode === 'dark-light') return a.metadata.visual.brightness - b.metadata.visual.brightness;
-      if (sortMode === 'light-dark') return b.metadata.visual.brightness - a.metadata.visual.brightness;
-      if (sortMode === 'muted-vivid') return a.metadata.visual.colorfulness - b.metadata.visual.colorfulness;
-      if (sortMode === 'vivid-muted') return b.metadata.visual.colorfulness - a.metadata.visual.colorfulness;
-      if (sortMode === 'hue') return a.metadata.visual.dominantAverageColor.hsv.h - b.metadata.visual.dominantAverageColor.hsv.h;
-      if (sortMode === 'people-asc') return a.metadata.semantic.people_count - b.metadata.semantic.people_count;
-      return b.metadata.semantic.people_count - a.metadata.semantic.people_count;
+      let comparison = 0;
+      if (mode === 'date') comparison = a.date.localeCompare(b.date);
+      else if (mode === 'light') comparison = a.metadata.visual.brightness - b.metadata.visual.brightness;
+      else if (mode === 'color') comparison = compareColor(a, b);
+      else comparison = a.metadata.semantic.people_count - b.metadata.semantic.people_count;
+      if (comparison === 0) comparison = a.date.localeCompare(b.date) || a.id.localeCompare(b.id);
+      return direction === 'asc' ? comparison : -comparison;
     });
-  }, [photos, selectedShots, selectedPeople, selectedColors, selectedTags, sortMode]);
+  }, [photos, mode, direction]);
 
-  const activePhoto = activeIndex === null ? null : filteredPhotos[activeIndex];
-  const dateSorting = sortMode === 'date-desc' || sortMode === 'date-asc';
-  const activeFilterCount = selectedShots.length + selectedPeople.length + selectedColors.length + selectedTags.length;
+  const activePhoto = activeIndex === null ? null : sortedPhotos[activeIndex];
 
   useEffect(() => {
     if (activeIndex === null) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setActiveIndex(null);
-      if (event.key === 'ArrowRight') setActiveIndex((activeIndex + 1) % filteredPhotos.length);
-      if (event.key === 'ArrowLeft') setActiveIndex((activeIndex - 1 + filteredPhotos.length) % filteredPhotos.length);
+      if (event.key === 'ArrowRight') setActiveIndex((activeIndex + 1) % sortedPhotos.length);
+      if (event.key === 'ArrowLeft') setActiveIndex((activeIndex - 1 + sortedPhotos.length) % sortedPhotos.length);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [activeIndex, filteredPhotos.length]);
+  }, [activeIndex, sortedPhotos.length]);
 
   const groups = useMemo(() => {
     const result: { key: string; label: string; photos: IndexedPhoto[] }[] = [];
-    filteredPhotos.forEach((photo, index) => {
+    sortedPhotos.forEach((photo, index) => {
       const key = photo.date;
       const last = result[result.length - 1];
       const item = { photo, index };
@@ -150,18 +115,11 @@ export default function Home() {
       else result.push({ key, label: dateLabel(photo.date), photos: [item] });
     });
     return result;
-  }, [filteredPhotos]);
-
-  const clearFilters = () => {
-    setSelectedShots([]);
-    setSelectedPeople([]);
-    setSelectedColors([]);
-    setSelectedTags([]);
-  };
+  }, [sortedPhotos]);
 
   const move = (direction: -1 | 1) => {
-    if (activeIndex === null || filteredPhotos.length === 0) return;
-    setActiveIndex((activeIndex + direction + filteredPhotos.length) % filteredPhotos.length);
+    if (activeIndex === null || sortedPhotos.length === 0) return;
+    setActiveIndex((activeIndex + direction + sortedPhotos.length) % sortedPhotos.length);
   };
 
   const onTouchEnd = (event: React.TouchEvent) => {
@@ -207,64 +165,27 @@ export default function Home() {
       <header>
         <h1>roma&apos;s photos</h1>
         <div className="library-controls">
-          <span className="result-count">{loaded ? `${filteredPhotos.length} photos` : 'loading'}</span>
+          <span className="result-count">{loaded ? `${sortedPhotos.length} photos` : 'loading'}</span>
           <div className="view-toggle" role="group" aria-label="Photo layout">
             <button type="button" aria-pressed={mobileView === 'feed'} onClick={() => selectMobileView('feed')}>feed</button>
             <button type="button" aria-pressed={mobileView === 'grid'} onClick={() => selectMobileView('grid')}>grid</button>
           </div>
-          <label className="sort-control">
-            <span>sort</span>
-            <select value={sortMode} onChange={(event) => setSortMode(event.target.value as SortMode)}>
-              <option value="date-desc">newest first</option>
-              <option value="date-asc">oldest first</option>
-              <option value="dark-light">dark to light</option>
-              <option value="light-dark">light to dark</option>
-              <option value="muted-vivid">muted to vivid</option>
-              <option value="vivid-muted">vivid to muted</option>
-              <option value="hue">by hue</option>
-              <option value="people-asc">few to many people</option>
-              <option value="people-desc">many to few people</option>
+          <label className="mode-control">
+            <span>mode</span>
+            <select value={mode} onChange={(event) => setMode(event.target.value as Mode)}>
+              <option value="date">date</option>
+              <option value="light">light</option>
+              <option value="color">color</option>
+              <option value="people">people</option>
             </select>
           </label>
-          <button className="filter-toggle" type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((open) => !open)}>
-            filters{activeFilterCount > 0 ? ` · ${activeFilterCount}` : ''}
+          <button className="direction-toggle" type="button" aria-label={directionLabel(mode, direction)} title={directionLabel(mode, direction)} onClick={() => setDirection((current) => current === 'asc' ? 'desc' : 'asc')}>
+            {direction === 'asc' ? '↑' : '↓'}
           </button>
         </div>
       </header>
 
-      {filtersOpen && (
-        <section className="filter-panel" aria-label="Photo filters">
-          <div className="filter-group">
-            <h2>framing</h2>
-            <div className="options">{shotScales.map((item) => (
-              <button key={item} type="button" aria-pressed={selectedShots.includes(item)} onClick={() => setSelectedShots(toggle(selectedShots, item))}>{label(item)}</button>
-            ))}</div>
-          </div>
-          <div className="filter-group">
-            <h2>people</h2>
-            <div className="options">{peopleGroups.map((item) => (
-              <button key={item} type="button" aria-pressed={selectedPeople.includes(item)} onClick={() => setSelectedPeople(toggle(selectedPeople, item))}>{label(item)}</button>
-            ))}</div>
-          </div>
-          <div className="filter-group color-group">
-            <h2>color</h2>
-            <div className="options">{colors.map((item) => (
-              <button className="color-option" key={item} type="button" aria-pressed={selectedColors.includes(item)} onClick={() => setSelectedColors(toggle(selectedColors, item))}>
-                <span className="swatch" style={{ background: colorHex[item] }} />{item}
-              </button>
-            ))}</div>
-          </div>
-          <div className="filter-group tag-group">
-            <h2>tags</h2>
-            <div className="options">{tagOptions.map(([item, count]) => (
-              <button key={item} type="button" aria-pressed={selectedTags.includes(item)} onClick={() => setSelectedTags(toggle(selectedTags, item))}>{label(item)} <span>{count}</span></button>
-            ))}</div>
-          </div>
-          <button className="clear-filters" type="button" disabled={activeFilterCount === 0} onClick={clearFilters}>clear</button>
-        </section>
-      )}
-
-      {dateSorting ? (
+      {mode === 'date' ? (
         <div className="timeline">
           <aside aria-label="Navigate by date">
             <nav>{groups.map((group) => <a key={group.key} href={`#date-${group.key}`}>{group.label}</a>)}</nav>
@@ -276,13 +197,13 @@ export default function Home() {
                 {renderPhotos(group.photos)}
               </section>
             ))}
-            {loaded && filteredPhotos.length === 0 && <p className="empty-state">no photos match these filters</p>}
+            {loaded && sortedPhotos.length === 0 && <p className="empty-state">no photos</p>}
           </div>
         </div>
       ) : (
         <section className="sorted-results">
-          {renderPhotos(filteredPhotos.map((photo, index) => ({ photo, index })))}
-          {loaded && filteredPhotos.length === 0 && <p className="empty-state">no photos match these filters</p>}
+          {renderPhotos(sortedPhotos.map((photo, index) => ({ photo, index })))}
+          {loaded && sortedPhotos.length === 0 && <p className="empty-state">no photos</p>}
         </section>
       )}
 
@@ -294,6 +215,7 @@ export default function Home() {
             event.stopPropagation();
             if (window.matchMedia('(max-width: 640px)').matches) onLightboxTap();
           }} />
+          <span className="lightbox-date">{dateLabel(activePhoto.date)}</span>
           <button className="next" type="button" aria-label="Next photo" onClick={(event) => { event.stopPropagation(); move(1); }}>›</button>
         </div>
       )}
