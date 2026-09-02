@@ -139,7 +139,16 @@ def discover_shoots(archive: Path, config: dict[str, Any], exclusions: list[dict
     return result
 
 
-def convert_image(source: Path, destination: Path, max_edge: int, quality: int) -> None:
+def image_dimensions(path: Path) -> tuple[int, int]:
+    result = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(path)], check=True, capture_output=True, text=True)
+    width = re.search(r"pixelWidth:\s+(\d+)", result.stdout)
+    height = re.search(r"pixelHeight:\s+(\d+)", result.stdout)
+    if not width or not height or int(width[1]) <= 0 or int(height[1]) <= 0:
+        raise ValueError(f"Cannot read image dimensions: {path}")
+    return int(width[1]), int(height[1])
+
+
+def convert_image(source: Path, destination: Path, max_edge: int, quality: int) -> tuple[int, int]:
     destination.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as handle:
         resized = Path(handle.name)
@@ -148,6 +157,7 @@ def convert_image(source: Path, destination: Path, max_edge: int, quality: int) 
         if not resized.exists() or resized.stat().st_size == 0:
             raise ValueError(f"Image decoder returned no data for {source.name}")
         subprocess.run(["cwebp", "-quiet", "-q", str(quality), "-metadata", "none", str(resized), "-o", str(destination)], check=True)
+        return image_dimensions(resized)
     finally:
         resized.unlink(missing_ok=True)
 
@@ -245,7 +255,7 @@ def main() -> None:
                 thumb_path = album_stage / "thumbs" / web_name
                 try:
                     convert_image(image, web_path, processing["webMaxEdge"], processing["webQuality"])
-                    convert_image(image, thumb_path, processing["thumbMaxEdge"], processing["thumbQuality"])
+                    thumb_width, thumb_height = convert_image(image, thumb_path, processing["thumbMaxEdge"], processing["thumbQuality"])
                 except (subprocess.CalledProcessError, ValueError) as error:
                     web_path.unlink(missing_ok=True)
                     thumb_path.unlink(missing_ok=True)
@@ -266,6 +276,7 @@ def main() -> None:
                 photos.append({
                     "id": identifier, "albumId": album_id,
                     "src": f"{base_url}/{album_id}/web/{web_name}", "thumb": f"{base_url}/{album_id}/thumbs/{web_name}",
+                    "thumbWidth": thumb_width, "thumbHeight": thumb_height,
                     "title": title, "date": date, "year": year, "city": city, "rating": rating,
                     "genres": photo_metadata.get("genres", metadata.get("genres", [])),
                     "subjects": photo_metadata.get("subjects", metadata.get("subjects", [])),

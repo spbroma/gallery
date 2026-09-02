@@ -3,8 +3,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { shuffle } from '../lib/shuffle';
+import { PhotoGrid } from './photo-grid';
 
-type Photo = { id: string; albumId: string; src: string; thumb: string; date: string };
+type Photo = { id: string; albumId: string; src: string; thumb: string; date: string; thumbWidth: number; thumbHeight: number };
 type Gallery = { photos: Photo[] };
 type Visual = {
   brightness: number;
@@ -62,7 +63,6 @@ export default function Home() {
   const [shuffledPhotos, setShuffledPhotos] = useState<LibraryPhoto[]>([]);
   const [direction, setDirection] = useState<Direction>('desc');
   const [mobileView, setMobileView] = useState<MobileView>('grid');
-  const [navigatorOrder, setNavigatorOrder] = useState<number[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
@@ -106,55 +106,9 @@ export default function Home() {
 
   const activePhoto = activeIndex === null ? null : sortedPhotos[activeIndex];
 
-  useEffect(() => {
-    if (mode === 'date' || mode === 'shuffle') return;
-    const container = document.querySelector<HTMLElement>('.sorted-results');
-    if (!container) return;
-    let frame = 0;
-    const measure = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const remaining = [...container.querySelectorAll<HTMLElement>('[data-photo-index]')]
-          .map((element) => {
-            const rect = element.getBoundingClientRect();
-            return {
-              index: Number(element.dataset.photoIndex),
-              left: rect.left,
-              top: rect.top + window.scrollY,
-            };
-          })
-          .sort((a, b) => a.top - b.top || a.left - b.left);
-        const visualOrder: number[] = [];
-        while (remaining.length > 0) {
-          const rowTop = remaining[0].top;
-          const row = remaining.filter((item) => item.top - rowTop <= 24);
-          remaining.splice(0, row.length);
-          row.sort((a, b) => a.left - b.left || a.top - b.top);
-          visualOrder.push(...row.map((item) => item.index));
-        }
-        setNavigatorOrder((current) => (
-          current.length === visualOrder.length && current.every((value, index) => value === visualOrder[index])
-            ? current
-            : visualOrder
-        ));
-      });
-    };
-    const observer = new ResizeObserver(measure);
-    observer.observe(container);
-    container.addEventListener('load', measure, true);
-    window.addEventListener('resize', measure);
-    measure();
-    return () => {
-      window.cancelAnimationFrame(frame);
-      observer.disconnect();
-      container.removeEventListener('load', measure, true);
-      window.removeEventListener('resize', measure);
-    };
-  }, [mode, sortedPhotos, mobileView]);
-
-  const visualNavigatorOrder = navigatorOrder.length === sortedPhotos.length
-    ? navigatorOrder
-    : sortedPhotos.map((_, index) => index);
+  // Shortest-column placement preserves the sorted top-to-bottom order,
+  // with left-to-right ties. The strip and lightbox use that same sequence.
+  const visualNavigatorOrder = sortedPhotos.map((_, index) => index);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -219,17 +173,12 @@ export default function Home() {
     const ratio = Math.max(0, Math.min(0.9999, (clientY - rect.top) / rect.height));
     const position = Math.floor(ratio * visualNavigatorOrder.length);
     const photoIndex = visualNavigatorOrder[position];
-    document.querySelector<HTMLElement>(`[data-photo-index="${photoIndex}"]`)?.scrollIntoView({ block: 'center' });
+    document.querySelector<HTMLElement>(`.photo-grid [data-photo-index="${photoIndex}"]`)?.scrollIntoView({ block: 'center' });
   };
 
   const renderPhotos = (items: IndexedPhoto[]) => (
-    <div className="photo-grid">
-      {items.map(({ photo, index }) => (
-        <button key={`${photo.albumId}-${photo.id}`} type="button" data-photo-index={index} aria-label="Open photo" onClick={() => { setActiveIndex(index); setLightboxControls(false); }}>
-          <img src={`${basePath}${photo.thumb}`} alt="" loading="lazy" />
-        </button>
-      ))}
-    </div>
+    <PhotoGrid items={items} mobileView={mobileView} basePath={basePath}
+      onOpen={(index) => { setActiveIndex(index); setLightboxControls(false); }} />
   );
 
   return (
@@ -247,7 +196,7 @@ export default function Home() {
             setMode('shuffle');
           }}><span>random shuffle</span></button>
           <label className="mode-control">
-            <span>mode</span>
+            <span>sort</span>
             <select value={mode} onChange={(event) => setMode(event.target.value as Mode)}>
               <option value="date">date</option>
               <option value="light">light</option>
