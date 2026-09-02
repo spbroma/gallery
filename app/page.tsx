@@ -75,6 +75,7 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [neighborIndex, setNeighborIndex] = useState<Record<string, string[]>>({});
   const [exploreHistory, setExploreHistory] = useState<number[]>([]);
+  const [relatedExpanded, setRelatedExpanded] = useState(true);
   const [previousPhotoIndex, setPreviousPhotoIndex] = useState<number | null>(null);
   const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
@@ -346,7 +347,7 @@ export default function Home() {
       )}
 
       {activePhoto && (
-        <div className={`lightbox${lightboxControls ? ' controls-visible' : ''}${relatedIndices.length || exploreHistory.length ? ' has-related' : ''}`} role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onLightboxTap} onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={onTouchEnd}>
+        <div className={`lightbox${lightboxControls ? ' controls-visible' : ''}${relatedIndices.length || exploreHistory.length ? ' has-related' : ''}${relatedExpanded ? '' : ' related-collapsed'}`} role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onLightboxTap} onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={onTouchEnd}>
           <button className="close" type="button" aria-label="Close" onClick={(event) => { event.stopPropagation(); setActiveIndex(null); }}>×</button>
           <button className="previous" type="button" aria-label="Previous photo" onClick={(event) => { event.stopPropagation(); move(-1); }}>‹</button>
           <img className="lightbox-photo" src={`${basePath}${activePhoto.src}`} alt="" onClick={(event) => {
@@ -359,9 +360,13 @@ export default function Home() {
             <div className="related-photos" role="group" aria-label="Explore similar photos"
               onClick={(event) => event.stopPropagation()}
               onTouchStart={(event) => event.stopPropagation()} onTouchEnd={(event) => event.stopPropagation()}>
-              <span className="related-label">{relatedIndices.length > 0 ? 'similar photos' : 'no similar photos'}</span>
-              <div className="related-items">
+              <div className="related-heading">
                 <button className="explore-back" type="button" disabled={exploreHistory.length === 0} aria-label="Back to previous photo" onClick={goBack}>← back</button>
+                <button className="related-toggle" type="button" aria-expanded={relatedExpanded} aria-controls="related-items" onClick={() => setRelatedExpanded((expanded) => !expanded)}>
+                  {relatedIndices.length > 0 ? 'similar photos' : 'no similar photos'} <span aria-hidden="true">{relatedExpanded ? '▾' : '▸'}</span>
+                </button>
+              </div>
+              <div className="related-items" id="related-items" hidden={!relatedExpanded}>
                 {relatedIndices.map((index, position) => (
                   <button className="related-photo" key={photoKey(sortedPhotos[index])} type="button" aria-label={`Explore similar photo ${position + 1}`} onClick={() => visitPhoto(index)}>
                     <img src={`${basePath}${sortedPhotos[index].thumb}`} alt="" />
