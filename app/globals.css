@@ -8,11 +8,19 @@ button, select { font: inherit; }
 button:focus-visible, select:focus-visible, a:focus-visible { outline: 1px solid var(--white); outline-offset: 3px; }
 header { align-items: center; display: flex; justify-content: space-between; min-height: 84px; padding: 16px clamp(16px, 2.8vw, 44px); }
 h1 { font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin: 0; }
+.shuffle-button { background: transparent; cursor: pointer; display: inline-flex; white-space: nowrap; }
+.shuffle-button:hover { border-color: #777; }
+.shuffle-button:disabled, .direction-toggle:disabled { color: var(--muted); cursor: default; opacity: .5; }
 .library-controls { align-items: center; display: flex; gap: 20px; }
 .view-toggle { display: none; }
+.view-toggle, .shuffle-button { border: 1px solid var(--line); padding: 2px; }
+.view-toggle button, .shuffle-button span { background: transparent; border: 0; color: var(--muted); cursor: pointer; display: block; font-size: 9px; letter-spacing: .06em; line-height: 14px; padding: 5px 7px; text-transform: lowercase; }
+.view-toggle button[aria-pressed='true'] { background: var(--white); color: var(--black); }
 .result-count, .mode-control span { color: var(--muted); font-size: 10px; letter-spacing: .05em; text-transform: lowercase; }
 .mode-control { align-items: center; display: flex; gap: 8px; }
-.mode-control select { appearance: none; background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; color: var(--white); cursor: pointer; font-size: 10px; letter-spacing: .04em; padding: 4px 18px 4px 1px; text-transform: lowercase; }
+.mode-control select { appearance: none; background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; color: var(--white); color-scheme: dark; cursor: pointer; font-size: 10px; letter-spacing: .04em; padding: 4px 18px 4px 1px; text-transform: lowercase; }
+/* Native popups do not consistently inherit the select's background. */
+.mode-control option { background-color: var(--black); color: var(--white); }
 .direction-toggle { align-items: center; background: transparent; border: 1px solid var(--line); color: var(--white); cursor: pointer; display: inline-flex; font-size: 14px; height: 29px; justify-content: center; padding: 0; width: 29px; }
 .direction-toggle:hover { border-color: #777; }
 .timeline { display: grid; grid-template-columns: clamp(130px, 15vw, 220px) minmax(0, 1fr); padding: 0 clamp(8px, 1.1vw, 18px); }
@@ -44,11 +52,9 @@ aside a:hover, aside a:focus-visible { color: var(--white); }
 @media (max-width: 900px) { .photo-grid { column-count: 2; } }
 @media (max-width: 640px) {
   header { align-items: flex-start; background: var(--black); flex-direction: column; gap: 14px; min-height: 0; padding-bottom: 14px; padding-top: 20px; position: sticky; top: 0; z-index: 4; }
-  .library-controls { gap: 12px; justify-content: space-between; width: 100%; }
+  .library-controls { flex-wrap: wrap; gap: 8px; justify-content: space-between; width: 100%; }
   .result-count { display: none; }
-  .view-toggle { border: 1px solid var(--line); display: inline-flex; padding: 2px; }
-  .view-toggle button { background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: 9px; letter-spacing: .06em; padding: 5px 7px; text-transform: lowercase; }
-  .view-toggle button[aria-pressed='true'] { background: var(--white); color: var(--black); }
+  .view-toggle { display: inline-flex; }
   .timeline { display: block; }
   aside { display: none; }
   .date-group { scroll-margin-top: 96px; }

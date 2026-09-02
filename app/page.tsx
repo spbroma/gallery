@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element -- URLs come from the storage-neutral gallery manifest. */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { shuffle } from '../lib/shuffle';
 
 type Photo = { id: string; albumId: string; src: string; thumb: string; date: string };
 type Gallery = { photos: Photo[] };
@@ -13,7 +14,7 @@ type PhotoMetadata = { key: string; id: string; albumId: string; date: string; v
 type FilterIndex = { photos: PhotoMetadata[] };
 type LibraryPhoto = Photo & { metadata: PhotoMetadata };
 type IndexedPhoto = { photo: LibraryPhoto; index: number };
-type Mode = 'date' | 'light' | 'color';
+type Mode = 'date' | 'light' | 'color' | 'shuffle';
 type Direction = 'asc' | 'desc';
 type MobileView = 'feed' | 'grid';
 
@@ -26,6 +27,7 @@ function dateLabel(date: string) {
 }
 
 function directionLabel(mode: Mode, direction: Direction) {
+  if (mode === 'shuffle') return 'random order';
   if (mode === 'date') return direction === 'asc' ? 'oldest first' : 'newest first';
   if (mode === 'light') return direction === 'asc' ? 'dark to light' : 'light to dark';
   return direction === 'asc' ? 'hue ascending' : 'hue descending';
@@ -41,7 +43,7 @@ function compareColor(a: LibraryPhoto, b: LibraryPhoto) {
   return first.h - second.h || second.s - first.s;
 }
 
-function navigatorSegmentStyle(photo: LibraryPhoto, mode: Exclude<Mode, 'date'>) {
+function navigatorSegmentStyle(photo: LibraryPhoto, mode: 'light' | 'color') {
   if (mode === 'light') {
     const lightness = Math.round(photo.metadata.visual.brightness * 100);
     return { background: `hsl(0 0% ${lightness}%)` };
@@ -57,6 +59,7 @@ export default function Home() {
   const [photos, setPhotos] = useState<LibraryPhoto[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [mode, setMode] = useState<Mode>('date');
+  const [shuffledPhotos, setShuffledPhotos] = useState<LibraryPhoto[]>([]);
   const [direction, setDirection] = useState<Direction>('desc');
   const [mobileView, setMobileView] = useState<MobileView>('grid');
   const [navigatorOrder, setNavigatorOrder] = useState<number[]>([]);
@@ -89,6 +92,7 @@ export default function Home() {
   }, []);
 
   const sortedPhotos = useMemo(() => {
+    if (mode === 'shuffle') return shuffledPhotos;
     const result = [...photos];
     return result.sort((a, b) => {
       let comparison = 0;
@@ -98,12 +102,12 @@ export default function Home() {
       if (comparison === 0) comparison = a.date.localeCompare(b.date) || a.id.localeCompare(b.id);
       return direction === 'asc' ? comparison : -comparison;
     });
-  }, [photos, mode, direction]);
+  }, [photos, mode, direction, shuffledPhotos]);
 
   const activePhoto = activeIndex === null ? null : sortedPhotos[activeIndex];
 
   useEffect(() => {
-    if (mode === 'date') return;
+    if (mode === 'date' || mode === 'shuffle') return;
     const container = document.querySelector<HTMLElement>('.sorted-results');
     if (!container) return;
     let frame = 0;
@@ -238,15 +242,20 @@ export default function Home() {
             <button type="button" aria-pressed={mobileView === 'feed'} onClick={() => selectMobileView('feed')}>feed</button>
             <button type="button" aria-pressed={mobileView === 'grid'} onClick={() => selectMobileView('grid')}>grid</button>
           </div>
+          <button className="shuffle-button" type="button" disabled={!loaded || photos.length < 2} aria-pressed={mode === 'shuffle'} onClick={() => {
+            setShuffledPhotos(shuffle(photos));
+            setMode('shuffle');
+          }}><span>random shuffle</span></button>
           <label className="mode-control">
             <span>mode</span>
             <select value={mode} onChange={(event) => setMode(event.target.value as Mode)}>
               <option value="date">date</option>
               <option value="light">light</option>
               <option value="color">color</option>
+              {mode === 'shuffle' && <option value="shuffle" disabled>random</option>}
             </select>
           </label>
-          <button className="direction-toggle" type="button" aria-label={directionLabel(mode, direction)} title={directionLabel(mode, direction)} onClick={() => setDirection((current) => current === 'asc' ? 'desc' : 'asc')}>
+          <button className="direction-toggle" type="button" disabled={mode === 'shuffle'} aria-label={directionLabel(mode, direction)} title={directionLabel(mode, direction)} onClick={() => setDirection((current) => current === 'asc' ? 'desc' : 'asc')}>
             {direction === 'asc' ? '↑' : '↓'}
           </button>
         </div>
@@ -273,7 +282,7 @@ export default function Home() {
             {renderPhotos(sortedPhotos.map((photo, index) => ({ photo, index })))}
             {loaded && sortedPhotos.length === 0 && <p className="empty-state">no photos</p>}
           </section>
-          {sortedPhotos.length > 0 && (
+          {(mode === 'light' || mode === 'color') && sortedPhotos.length > 0 && (
             <button
               className="mode-navigator"
               type="button"
