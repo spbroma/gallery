@@ -49,7 +49,6 @@ aside a:hover, aside a:focus-visible { color: var(--white); }
 .empty-state { color: var(--muted); font-size: 11px; letter-spacing: .04em; margin: 28px 0; text-transform: lowercase; }
 .lightbox { align-items: center; background: rgba(0, 0, 0, .985); display: flex; inset: 0; justify-content: center; padding: 28px 70px; position: fixed; touch-action: pan-y; z-index: 10; }
 .lightbox-photo { display: block; height: auto; max-height: calc(100vh - 40px); max-width: calc(100vw - 140px); object-fit: contain; width: auto; }
-.lightbox-date { bottom: 16px; color: #777; font-size: 9px; left: 50%; letter-spacing: .07em; position: absolute; text-transform: lowercase; transform: translateX(-50%); white-space: nowrap; }
 .lightbox button { background: transparent; border: 0; color: #aaa; cursor: pointer; position: absolute; transition: color .2s ease; z-index: 2; }
 .lightbox button:hover { color: #fff; }
 .close { font-size: 34px; font-weight: 200; height: 52px; line-height: 1; padding: 8px; right: 8px; top: 4px; width: 52px; z-index: 4 !important; }
@@ -57,7 +56,6 @@ aside a:hover, aside a:focus-visible { color: var(--white); }
 .previous { left: 0; }.next { right: 0; }
 .lightbox.has-related { --related-space: calc(130px + env(safe-area-inset-bottom, 0px)); padding-bottom: var(--related-space); }
 .has-related .lightbox-photo { max-height: calc(100dvh - var(--related-space) - 28px); }
-.has-related .lightbox-date { bottom: calc(var(--related-space) - 12px); }
 .has-related .previous, .has-related .next { height: calc(100% - var(--related-space)); }
 .related-photos { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); left: 50%; max-width: calc(100vw - 24px); position: absolute; transform: translateX(-50%); width: 312px; z-index: 3; }
 .related-heading { margin-bottom: 8px; position: relative; text-align: center; }
@@ -71,6 +69,7 @@ aside a:hover, aside a:focus-visible { color: var(--white); }
 .related-photo:hover { border-color: var(--muted); }
 .related-photos .explore-back { font-size: 10px; left: 0; padding: 6px 0; top: 0; white-space: nowrap; }
 .explore-back:disabled { visibility: hidden; }
+.related-collapsed .explore-back { display: none; }
 .related-collapsed .related-heading { margin-bottom: 0; }
 
 @media (max-width: 900px) { .photo-grid { --photo-columns: 2; } }
@@ -90,9 +89,7 @@ aside a:hover, aside a:focus-visible { color: var(--white); }
   .has-related .lightbox-photo { max-height: calc(100dvh - var(--related-space)); }
   .related-photos .related-photo { height: 48px; width: 72px; }
   .related-photos { width: 240px; }
-  .lightbox-date { opacity: 0; pointer-events: none; transition: opacity .2s ease; }
   .previous, .next { font-size: 42px; opacity: 0; pointer-events: none; width: 48px; }
-  .lightbox.controls-visible .lightbox-date,
   .lightbox.controls-visible .previous, .lightbox.controls-visible .next { opacity: 1; pointer-events: auto; }
 }
 .lightbox.has-related.related-collapsed { --related-space: calc(64px + env(safe-area-inset-bottom, 0px)); }

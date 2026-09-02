@@ -354,7 +354,6 @@ export default function Home() {
             event.stopPropagation();
             if (window.matchMedia('(max-width: 640px)').matches) onLightboxTap();
           }} />
-          <span className="lightbox-date">{dateLabel(activePhoto.date)}</span>
           <button className="next" type="button" aria-label="Next photo" onClick={(event) => { event.stopPropagation(); move(1); }}>›</button>
           {(relatedIndices.length > 0 || exploreHistory.length > 0) && (
             <div className="related-photos" role="group" aria-label="Explore similar photos"
