@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { shuffle } from '../lib/shuffle';
 import { PhotoGrid } from './photo-grid';
+import { navigatorWeights, scrollTarget } from '../lib/navigator';
 
 type Photo = { id: string; albumId: string; src: string; thumb: string; date: string; thumbWidth: number; thumbHeight: number };
 type Gallery = { photos: Photo[] };
@@ -63,10 +64,34 @@ export default function Home() {
   const [shuffledPhotos, setShuffledPhotos] = useState<LibraryPhoto[]>([]);
   const [direction, setDirection] = useState<Direction>('desc');
   const [mobileView, setMobileView] = useState<MobileView>('grid');
+  const [expandedSort, setExpandedSort] = useState(false);
+  const [stripWeights, setStripWeights] = useState<number[]>([]);
+  const controlsRef = useRef<HTMLDivElement>(null);
+  const sortRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
   const suppressTap = useRef(false);
+
+  useEffect(() => {
+    const controls = controlsRef.current;
+    const sort = sortRef.current;
+    if (!controls || !sort) return;
+    const options = sort.querySelector<HTMLElement>('.sort-options')!;
+    const label = sort.querySelector<HTMLElement>('.sort-label')!;
+    const measure = () => {
+      const siblings = [...controls.children].filter((element) => element !== sort && element.getBoundingClientRect().width > 0);
+      const siblingWidth = siblings.reduce((sum, element) => sum + element.getBoundingClientRect().width, 0);
+      const gaps = parseFloat(getComputedStyle(controls).columnGap) * siblings.length;
+      const sortWidth = label.getBoundingClientRect().width + parseFloat(getComputedStyle(sort).columnGap) + options.getBoundingClientRect().width;
+      setExpandedSort(siblingWidth + gaps + sortWidth <= controls.getBoundingClientRect().width);
+    };
+    const observer = new ResizeObserver(measure);
+    [controls, ...controls.children, options, label].forEach((element) => observer.observe(element));
+    window.addEventListener('resize', measure);
+    measure();
+    return () => { observer.disconnect(); window.removeEventListener('resize', measure); };
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -109,6 +134,28 @@ export default function Home() {
   // Shortest-column placement preserves the sorted top-to-bottom order,
   // with left-to-right ties. The strip and lightbox use that same sequence.
   const visualNavigatorOrder = sortedPhotos.map((_, index) => index);
+
+  useEffect(() => {
+    if (mode !== 'light' && mode !== 'color') return;
+    const grid = document.querySelector<HTMLElement>('.sorted-results .photo-grid');
+    if (!grid) return;
+    let frame = 0;
+    const measure = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const tops = [...grid.querySelectorAll<HTMLElement>('[data-photo-index]')]
+          .map((card) => card.getBoundingClientRect().top + window.scrollY);
+        const weights = navigatorWeights(tops, document.documentElement.scrollHeight);
+        setStripWeights((current) => current.length === weights.length && current.every((value, index) => Math.abs(value - weights[index]) < 0.01) ? current : weights);
+      });
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(grid);
+    observer.observe(document.body);
+    window.addEventListener('resize', measure);
+    measure();
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener('resize', measure); };
+  }, [mode, sortedPhotos, mobileView]);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -170,10 +217,11 @@ export default function Home() {
     const track = target.querySelector<HTMLElement>('.mode-navigator-track');
     if (!track || sortedPhotos.length === 0) return;
     const rect = track.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(0.9999, (clientY - rect.top) / rect.height));
-    const position = Math.floor(ratio * visualNavigatorOrder.length);
-    const photoIndex = visualNavigatorOrder[position];
-    document.querySelector<HTMLElement>(`.photo-grid [data-photo-index="${photoIndex}"]`)?.scrollIntoView({ block: 'center' });
+    const ratio = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+    window.scrollTo({
+      top: scrollTarget(ratio, document.documentElement.scrollHeight, document.documentElement.clientHeight),
+      behavior: 'instant',
+    });
   };
 
   const renderPhotos = (items: IndexedPhoto[]) => (
@@ -185,7 +233,7 @@ export default function Home() {
     <main className={`mobile-view-${mobileView}`}>
       <header>
         <h1>roma&apos;s photos</h1>
-        <div className="library-controls">
+        <div className="library-controls" ref={controlsRef}>
           <span className="result-count">{loaded ? `${sortedPhotos.length} photos` : 'loading'}</span>
           <div className="view-toggle" role="group" aria-label="Photo layout">
             <button type="button" aria-pressed={mobileView === 'feed'} onClick={() => selectMobileView('feed')}>feed</button>
@@ -195,15 +243,20 @@ export default function Home() {
             setShuffledPhotos(shuffle(photos));
             setMode('shuffle');
           }}><span>random shuffle</span></button>
-          <label className="mode-control">
-            <span>sort</span>
-            <select value={mode} onChange={(event) => setMode(event.target.value as Mode)}>
+          <div className={`mode-control${expandedSort ? ' expanded' : ''}`} ref={sortRef}>
+            <span className="sort-label">sort</span>
+            <div className="sort-options" role="group" aria-label="Sort">
+              {(['date', 'light', 'color'] as const).map((option) => (
+                <button key={option} type="button" aria-pressed={mode === option} onClick={() => setMode(option)}>{option}</button>
+              ))}
+            </div>
+            <select aria-label="Sort" value={mode} onChange={(event) => setMode(event.target.value as Mode)}>
               <option value="date">date</option>
               <option value="light">light</option>
               <option value="color">color</option>
               {mode === 'shuffle' && <option value="shuffle" disabled>random</option>}
             </select>
-          </label>
+          </div>
           <button className="direction-toggle" type="button" disabled={mode === 'shuffle'} aria-label={directionLabel(mode, direction)} title={directionLabel(mode, direction)} onClick={() => setDirection((current) => current === 'asc' ? 'desc' : 'asc')}>
             {direction === 'asc' ? '↑' : '↓'}
           </button>
@@ -248,7 +301,7 @@ export default function Home() {
               <span className="mode-navigator-track" aria-hidden="true">
                 {visualNavigatorOrder.map((photoIndex) => {
                   const photo = sortedPhotos[photoIndex];
-                  return <span key={`${photo.albumId}-${photo.id}`} data-photo-index={photoIndex} style={navigatorSegmentStyle(photo, mode)} />;
+                  return <span key={`${photo.albumId}-${photo.id}`} data-photo-index={photoIndex} style={{ ...navigatorSegmentStyle(photo, mode), flexGrow: stripWeights.length === sortedPhotos.length ? stripWeights[photoIndex] : 1 }} />;
                 })}
               </span>
             </button>
