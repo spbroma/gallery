@@ -337,6 +337,12 @@ def main() -> None:
     data_file.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     filters_file.parent.mkdir(parents=True, exist_ok=True)
     filters_file.write_text(json.dumps({"version": 1, "generatedAt": manifest["generatedAt"], "photos": filter_photos}, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+    if config.get("neighbors"):
+        command = [str(resolve_project_path(config["neighbors"]["python"])), str(PROJECT_ROOT / "scripts" / "build_neighbors.py"), "--config", str(resolve_project_path(args.config))]
+        if args.overlay:
+            command.extend(["--overlay", str(resolve_project_path(args.overlay))])
+        # Rebuild across the final merged manifest, not just the new shoot.
+        subprocess.run(command, cwd=PROJECT_ROOT, check=True)
     if photos and config["storage"]["provider"] == "local":
         first_web = output_root / photos[0]["albumId"] / "web" / f"{photos[0]['id']}.webp"
         if first_web.exists():

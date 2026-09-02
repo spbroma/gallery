@@ -1,10 +1,11 @@
 'use client';
 /* eslint-disable @next/next/no-img-element -- URLs come from the storage-neutral gallery manifest. */
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { shuffle } from '../lib/shuffle';
 import { PhotoGrid } from './photo-grid';
 import { navigatorWeights, scrollTarget } from '../lib/navigator';
+import { relatedKeys } from '../lib/related';
 
 type Photo = { id: string; albumId: string; src: string; thumb: string; date: string; thumbWidth: number; thumbHeight: number };
 type Gallery = { photos: Photo[] };
@@ -19,6 +20,9 @@ type IndexedPhoto = { photo: LibraryPhoto; index: number };
 type Mode = 'date' | 'light' | 'color' | 'shuffle';
 type Direction = 'asc' | 'desc';
 type MobileView = 'feed' | 'grid';
+type NeighborIndex = { neighbors: Record<string, string[]> };
+
+const photoKey = (photo: Photo) => `${photo.albumId}/${photo.id}`;
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -69,6 +73,9 @@ export default function Home() {
   const controlsRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [neighborIndex, setNeighborIndex] = useState<Record<string, string[]>>({});
+  const [exploreHistory, setExploreHistory] = useState<number[]>([]);
+  const [previousPhotoIndex, setPreviousPhotoIndex] = useState<number | null>(null);
   const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
   const suppressTap = useRef(false);
@@ -110,6 +117,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // Optional data: failure must not prevent opening the ordinary gallery.
+    fetch(`${basePath}/data/photo-neighbors.json`)
+      .then((response) => response.ok ? response.json() as Promise<NeighborIndex> : Promise.reject())
+      .then((data) => setNeighborIndex(data.neighbors ?? {}))
+      .catch(() => setNeighborIndex({}));
+  }, []);
+
+  useEffect(() => {
     const savedView = window.localStorage.getItem('roma-photos-mobile-view');
     if (savedView !== 'feed' && savedView !== 'grid') return;
     const frame = window.requestAnimationFrame(() => setMobileView(savedView));
@@ -130,6 +145,27 @@ export default function Home() {
   }, [photos, mode, direction, shuffledPhotos]);
 
   const activePhoto = activeIndex === null ? null : sortedPhotos[activeIndex];
+  const photoIndices = useMemo(() => new Map(sortedPhotos.map((photo, index) => [photoKey(photo), index])), [sortedPhotos]);
+  const relatedIndices = activePhoto ? relatedKeys(
+    neighborIndex[photoKey(activePhoto)] ?? [], photoKey(activePhoto),
+    previousPhotoIndex === null ? null : photoKey(sortedPhotos[previousPhotoIndex]),
+    new Set(photoIndices.keys()),
+  ).map((key) => photoIndices.get(key)!) : [];
+
+  const visitPhoto = useCallback((index: number) => {
+    if (index === activeIndex) return;
+    if (activeIndex !== null) setExploreHistory((history) => [...history, activeIndex]);
+    setPreviousPhotoIndex(activeIndex);
+    setActiveIndex(index);
+  }, [activeIndex]);
+
+  const goBack = () => {
+    const index = exploreHistory.at(-1);
+    if (index === undefined) return;
+    setExploreHistory((history) => history.slice(0, -1));
+    setPreviousPhotoIndex(activeIndex);
+    setActiveIndex(index);
+  };
 
   // Shortest-column placement preserves the sorted top-to-bottom order,
   // with left-to-right ties. The strip and lightbox use that same sequence.
@@ -161,12 +197,12 @@ export default function Home() {
     if (activeIndex === null) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setActiveIndex(null);
-      if (event.key === 'ArrowRight') setActiveIndex((activeIndex + 1) % sortedPhotos.length);
-      if (event.key === 'ArrowLeft') setActiveIndex((activeIndex - 1 + sortedPhotos.length) % sortedPhotos.length);
+      if (event.key === 'ArrowRight') visitPhoto((activeIndex + 1) % sortedPhotos.length);
+      if (event.key === 'ArrowLeft') visitPhoto((activeIndex - 1 + sortedPhotos.length) % sortedPhotos.length);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [activeIndex, sortedPhotos.length]);
+  }, [activeIndex, sortedPhotos.length, visitPhoto]);
 
   const groups = useMemo(() => {
     const result: { key: string; label: string; photos: IndexedPhoto[] }[] = [];
@@ -182,7 +218,7 @@ export default function Home() {
 
   const move = (direction: -1 | 1) => {
     if (activeIndex === null || sortedPhotos.length === 0) return;
-    setActiveIndex((activeIndex + direction + sortedPhotos.length) % sortedPhotos.length);
+    visitPhoto((activeIndex + direction + sortedPhotos.length) % sortedPhotos.length);
   };
 
   const onTouchEnd = (event: React.TouchEvent) => {
@@ -226,7 +262,7 @@ export default function Home() {
 
   const renderPhotos = (items: IndexedPhoto[]) => (
     <PhotoGrid items={items} mobileView={mobileView} basePath={basePath}
-      onOpen={(index) => { setActiveIndex(index); setLightboxControls(false); }} />
+      onOpen={(index) => { setActiveIndex(index); setExploreHistory([]); setPreviousPhotoIndex(null); setLightboxControls(false); }} />
   );
 
   return (
@@ -310,15 +346,30 @@ export default function Home() {
       )}
 
       {activePhoto && (
-        <div className={`lightbox${lightboxControls ? ' controls-visible' : ''}`} role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onLightboxTap} onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={onTouchEnd}>
+        <div className={`lightbox${lightboxControls ? ' controls-visible' : ''}${relatedIndices.length || exploreHistory.length ? ' has-related' : ''}`} role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onLightboxTap} onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={onTouchEnd}>
           <button className="close" type="button" aria-label="Close" onClick={(event) => { event.stopPropagation(); setActiveIndex(null); }}>×</button>
           <button className="previous" type="button" aria-label="Previous photo" onClick={(event) => { event.stopPropagation(); move(-1); }}>‹</button>
-          <img src={`${basePath}${activePhoto.src}`} alt="" onClick={(event) => {
+          <img className="lightbox-photo" src={`${basePath}${activePhoto.src}`} alt="" onClick={(event) => {
             event.stopPropagation();
             if (window.matchMedia('(max-width: 640px)').matches) onLightboxTap();
           }} />
           <span className="lightbox-date">{dateLabel(activePhoto.date)}</span>
           <button className="next" type="button" aria-label="Next photo" onClick={(event) => { event.stopPropagation(); move(1); }}>›</button>
+          {(relatedIndices.length > 0 || exploreHistory.length > 0) && (
+            <div className="related-photos" role="group" aria-label="Explore similar photos"
+              onClick={(event) => event.stopPropagation()}
+              onTouchStart={(event) => event.stopPropagation()} onTouchEnd={(event) => event.stopPropagation()}>
+              <span className="related-label">{relatedIndices.length > 0 ? 'similar photos' : 'no similar photos'}</span>
+              <div className="related-items">
+                <button className="explore-back" type="button" disabled={exploreHistory.length === 0} aria-label="Back to previous photo" onClick={goBack}>← back</button>
+                {relatedIndices.map((index, position) => (
+                  <button className="related-photo" key={photoKey(sortedPhotos[index])} type="button" aria-label={`Explore similar photo ${position + 1}`} onClick={() => visitPhoto(index)}>
+                    <img src={`${basePath}${sortedPhotos[index].thumb}`} alt="" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </main>

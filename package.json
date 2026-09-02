@@ -14,6 +14,7 @@
     "gallery:publish": "python3 scripts/publish.py",
     "gallery:preview": "python3 scripts/publish.py --overlay config/gallery.preview.json",
     "gallery:analyze": ".venv-analysis/bin/python scripts/analyze_library.py",
+    "gallery:neighbors": ".venv-analysis/bin/python scripts/build_neighbors.py",
     "gallery:meta:migrate": "python3 scripts/migrate_metadata.py",
     "gallery:admin": "python3 scripts/admin_server.py"
   },
