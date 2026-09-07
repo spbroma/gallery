@@ -270,6 +270,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate per-photo archive metadata with local models")
     parser.add_argument("--config", default="config/analysis.config.json")
     parser.add_argument("--source", help="Analyze only this exact numeric source folder")
+    parser.add_argument("--photo-id", action="append", dest="photo_ids", help="Analyze only this photo ID; repeat for multiple photos")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
@@ -293,6 +294,13 @@ def main() -> None:
         tasks = [(shoot, source, image) for image in image_files(source)]
     else:
         tasks = all_tasks
+    if args.photo_ids:
+        requested_ids = {photo_id_value.casefold() for photo_id_value in args.photo_ids}
+        tasks = [task for task in tasks if photo_id(task[2]).casefold() in requested_ids]
+        found_ids = {photo_id(task[2]).casefold() for task in tasks}
+        missing_ids = sorted(requested_ids - found_ids)
+        if missing_ids:
+            raise SystemExit(f"Photo IDs not found in selected source: {', '.join(missing_ids)}")
     selected_tasks = tasks[:args.limit] if args.limit else tasks
 
     embedding_config = config["embeddings"]

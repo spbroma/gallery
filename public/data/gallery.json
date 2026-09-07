@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-07T21:58:50.549938+00:00",
+  "generatedAt": "2026-09-07T22:21:33.039946+00:00",
   "source": "local",
   "albums": [
     {
@@ -1440,7 +1440,20 @@
       "rating": 2,
       "genres": [],
       "subjects": [],
-      "tags": [],
+      "tags": [
+        "water",
+        "sky",
+        "people",
+        "nature",
+        "diagonal",
+        "negative-space",
+        "close-up",
+        "one-person",
+        "mid-brightness",
+        "vivid",
+        "teal",
+        "gray"
+      ],
       "featured": false
     },
     {
@@ -1457,7 +1470,18 @@
       "rating": 2,
       "genres": [],
       "subjects": [],
-      "tags": [],
+      "tags": [
+        "animal",
+        "water",
+        "bicycle",
+        "diagonal",
+        "medium",
+        "no-people",
+        "dark",
+        "vivid",
+        "teal",
+        "green"
+      ],
       "featured": false
     },
     {
@@ -1474,7 +1498,18 @@
       "rating": 1,
       "genres": [],
       "subjects": [],
-      "tags": [],
+      "tags": [
+        "sky",
+        "nature",
+        "landscape",
+        "dense",
+        "wide",
+        "no-people",
+        "dark",
+        "vivid",
+        "red",
+        "brown"
+      ],
       "featured": false
     },
     {

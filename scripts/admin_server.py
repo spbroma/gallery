@@ -77,6 +77,16 @@ class Library:
             relative = shoot.relative_to(self.archive).as_posix()
             album_id = slugify(relative)
             published = sum(f"{album_id}/{photo_id(image)}" in self.published for image in files)
+            problem_count = 0
+            for image in files:
+                identifier = photo_id(image)
+                sidecar = read_json(metadata_path(shoot, image))
+                is_published = sidecar.get("publication", {}).get("published", f"{album_id}/{identifier}" in self.published)
+                pending = self.draft.get(f"{relative}/{identifier}")
+                if pending:
+                    is_published = pending["after"]["published"]
+                if is_published and self.photo_issues(sidecar):
+                    problem_count += 1
             result.append({
                 "path": relative,
                 "name": shoot.name,
@@ -85,8 +95,30 @@ class Library:
                 "photoCount": len(files),
                 "metadataCount": meta_count,
                 "publishedCount": published,
+                "problemCount": problem_count,
             })
         return result
+
+    def photo_issues(self, sidecar: dict[str, Any]) -> list[str]:
+        if not sidecar:
+            return ["metadata missing", "analysis incomplete", "embedding missing", "tags missing", "description missing"]
+        analysis = sidecar.get("analysis", {})
+        semantic = analysis.get("semantic", {})
+        editorial = sidecar.get("editorial", {})
+        tags = sidecar.get("tags", {})
+        visual = analysis.get("visual", {})
+        issues: list[str] = []
+        if analysis.get("status") != "ready" or semantic.get("error"):
+            issues.append("analysis incomplete")
+        if not isinstance(analysis.get("embedding"), list) or not analysis.get("embedding"):
+            issues.append("embedding missing")
+        if visual.get("brightness") is None or not visual.get("dominantAverageColor"):
+            issues.append("visual metrics missing")
+        if not validate_tags([*tags.get("manual", []), *tags.get("generated", [])]):
+            issues.append("tags missing")
+        if not (editorial.get("description") or analysis.get("description") or semantic.get("description")):
+            issues.append("description missing")
+        return issues
 
     def resolve_shoot(self, relative: str) -> tuple[Path, Path]:
         shoot = (self.archive / relative).resolve()
@@ -109,6 +141,7 @@ class Library:
             generated = tags.get("generated", [])
             photo = {
                 "id": identifier,
+                "shoot": relative,
                 "file": image.name,
                 "sourceTier": source.name,
                 "published": sidecar.get("publication", {}).get("published", f"{album_id}/{identifier}" in self.published),
@@ -121,6 +154,7 @@ class Library:
                 "colorProfile": visual.get("colorProfile", {}),
                 "hasMetadata": bool(sidecar),
                 "preview": f"/api/preview?shoot={quote(relative)}&id={quote(identifier)}",
+                "issues": self.photo_issues(sidecar),
             }
             photo["actualPublished"] = photo["published"]
             draft = self.draft.get(f"{relative}/{identifier}") if include_drafts else None
@@ -130,6 +164,40 @@ class Library:
             photo["metadataPending"] = f"{relative}/{identifier}" in self.metadata_dirty
             result.append(photo)
         return result
+
+    def all_photos(self, issues_only: bool = False) -> list[dict[str, Any]]:
+        photos = [photo for shoot in self.shoots() for photo in self.photos(shoot["path"])]
+        if issues_only:
+            photos = [photo for photo in photos if photo["published"] and photo["issues"]]
+        return photos
+
+    def analysis_targets(self) -> list[tuple[Path, list[str]]]:
+        targets: list[tuple[Path, list[str]]] = []
+        for shoot, source in discover_shoots(self.archive):
+            ids = []
+            for image in image_files(source):
+                document = read_json(metadata_path(shoot, image))
+                if document.get("publication", {}).get("published", False) and self.photo_issues(document):
+                    ids.append(photo_id(image))
+            if ids:
+                targets.append((source, ids))
+        return targets
+
+    def analyze_incomplete(self, progress: Any) -> None:
+        targets = self.analysis_targets()
+        if not targets:
+            progress("Analysis complete: no published photos are missing metadata.")
+            return
+        config = read_json(PROJECT_ROOT / "config" / "photo_publish.config.json")
+        python_value = Path(str(config.get("analysisPython", ".venv-analysis/bin/python"))).expanduser()
+        python_path = python_value if python_value.is_absolute() else PROJECT_ROOT / python_value
+        total = sum(len(ids) for _, ids in targets)
+        progress(f"Analyzing {total} incomplete published photos…")
+        for source, ids in targets:
+            command = [str(python_path), str(PROJECT_ROOT / "scripts" / "analyze_library.py"), "--source", str(source)]
+            for identifier in ids:
+                command.extend(["--photo-id", identifier])
+            self.run_logged(command, progress)
 
     def stage(self, payloads: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not payloads or len(payloads) > 10000:
@@ -307,6 +375,7 @@ class Library:
                     path = metadata_path(shoot, image)
                     backups.append((path, path.read_bytes() if path.exists() else None))
                     self.set_publication(entry["shoot"], entry["id"], entry["after"]["published"])
+                self.analyze_incomplete(progress)
                 progress("Rebuilding site files…")
                 output = self.run_logged([sys.executable, str(PROJECT_ROOT / "scripts" / "publish.py")], progress)
             except Exception:
@@ -377,6 +446,9 @@ class Handler(BaseHTTPRequestHandler):
             elif parsed.path == "/api/photos":
                 shoot = query.get("shoot", [""])[0]
                 self.send_json({"shoot": shoot, "photos": self.library.photos(shoot)})
+            elif parsed.path == "/api/all-photos":
+                issues_only = query.get("issues", ["0"])[0] == "1"
+                self.send_json({"photos": self.library.all_photos(issues_only)})
             elif parsed.path == "/api/preview":
                 path = self.library.preview(query.get("shoot", [""])[0], query.get("id", [""])[0])
                 self.send_file(path, "image/jpeg")

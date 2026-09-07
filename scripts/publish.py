@@ -248,7 +248,10 @@ def main() -> None:
                 )
             if limit:
                 images = images[:int(limit)]
-            for image in images:
+            if images:
+                print(f"[{relative}] preparing {len(images)} published photos", flush=True)
+            for image_index, image in enumerate(images, start=1):
+                print(f"[{relative}] {image_index}/{len(images)} {image.name}", flush=True)
                 identifier = photo_id(image)
                 web_name = f"{identifier}.webp"
                 web_path = album_stage / "web" / web_name

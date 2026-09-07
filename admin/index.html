@@ -13,8 +13,12 @@
   </header>
   <main>
     <aside>
-      <div class="aside-title">shoots</div>
-      <nav id="shoots"></nav>
+      <div class="library-views" aria-label="Library view">
+        <button id="view-shoots" class="active" type="button">shoots</button>
+        <button id="view-all" type="button">all photos</button>
+        <button id="view-issues" type="button">problems <span id="problem-count">0</span></button>
+      </div>
+      <div id="shoots-panel"><div class="aside-title">shoots</div><nav id="shoots"></nav></div>
     </aside>
     <section class="library">
       <div class="toolbar">
@@ -37,7 +41,7 @@
       <label class="select-photo"><input type="checkbox"><span></span></label>
       <button class="photo-open" type="button">
         <div class="photo-wrap"><img alt="" loading="lazy"><span class="publish-state"></span><span class="pending-state">pending</span></div>
-        <div class="photo-info"><div class="photo-name"></div><div class="tag-list"></div></div>
+        <div class="photo-info"><div class="photo-name"></div><div class="issue-list"></div><div class="tag-list"></div></div>
       </button>
     </div>
   </template>

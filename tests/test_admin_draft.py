@@ -60,7 +60,10 @@ class AdminDraftTests(unittest.TestCase):
         self.assertEqual(result['appliedCount'], 1)
         self.assertEqual(result['metadataCount'], 0)
         self.assertEqual(self.library.draft_view(), [])
-        run.assert_called_once()
+        self.assertEqual(run.call_count, 2)
+        analysis_command = run.call_args_list[0].args[0]
+        self.assertIn('analyze_library.py', analysis_command[1])
+        self.assertEqual(analysis_command[-2:], ['--photo-id', 'a'])
 
     def test_failed_rebuild_restores_sidecar_and_keeps_draft(self):
         original = self.sidecar.read_bytes()
@@ -79,6 +82,16 @@ class AdminDraftTests(unittest.TestCase):
         state = self.library.draft_state()
         self.assertEqual(state['draft'], [])
         self.assertEqual(state['metadataDirty'], [])
+
+    def test_problem_view_reports_missing_analysis_fields(self):
+        photo = self.library.photos('2026/shoot')[0]
+        self.assertEqual(photo['shoot'], '2026/shoot')
+        self.assertIn('analysis incomplete', photo['issues'])
+        self.assertIn('embedding missing', photo['issues'])
+        self.assertIn('description missing', photo['issues'])
+        self.assertEqual(self.library.all_photos(True), [])
+        self.library.stage([{'shoot': '2026/shoot', 'id': 'a', 'published': True}])
+        self.assertEqual([item['id'] for item in self.library.all_photos(True)], ['a'])
 
 
 if __name__ == '__main__':

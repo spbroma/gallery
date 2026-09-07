@@ -1,4 +1,4 @@
-const state = { shoots: [], photos: [], activeShoot: null, selected: new Set(), draft: [], metadataDirty: [], releasePending: false };
+const state = { shoots: [], photos: [], activeShoot: null, selected: new Set(), draft: [], metadataDirty: [], releasePending: false, view: 'shoots' };
 const $ = (selector) => document.querySelector(selector);
 const shootsNode = $('#shoots');
 const gridNode = $('#grid');
@@ -16,7 +16,15 @@ let editingPhoto = null;
 let draftManualTags = [];
 let draftGeneratedTags = [];
 
-const keyFor = (photo) => `${state.activeShoot.path}/${photo.id}`;
+const keyFor = (photo) => `${photo.shoot}/${photo.id}`;
+
+function renderViewTabs() {
+  $('#view-shoots').classList.toggle('active', state.view === 'shoots');
+  $('#view-all').classList.toggle('active', state.view === 'all');
+  $('#view-issues').classList.toggle('active', state.view === 'issues');
+  $('#shoots-panel').hidden = state.view !== 'shoots';
+  $('#problem-count').textContent = state.shoots.reduce((sum, shoot) => sum + shoot.problemCount, 0);
+}
 
 async function request(path, options = {}) {
   const response = await fetch(path, options);
@@ -40,6 +48,7 @@ function renderShoots() {
     button.addEventListener('click', () => selectShoot(shoot));
     return button;
   }));
+  renderViewTabs();
 }
 
 function visiblePhotos() {
@@ -71,6 +80,10 @@ function renderPhotos() {
     const open = card.querySelector('.photo-open');
     open.querySelector('img').src = photo.preview;
     open.querySelector('.photo-name').textContent = photo.file;
+    const visibleIssues = photo.published ? photo.issues : [];
+    open.querySelector('.issue-list').replaceChildren(...visibleIssues.map((issue) => {
+      const node = document.createElement('span'); node.textContent = issue; return node;
+    }));
     const tags = [
       ...photo.manualTags.map((tag) => ({ tag, manual: true })),
       ...photo.generatedTags.filter((tag) => !photo.manualTags.includes(tag)).map((tag) => ({ tag, manual: false })),
@@ -124,8 +137,11 @@ function addManualTag() {
 }
 
 async function reloadPhotos() {
-  if (!state.activeShoot) return;
-  state.photos = (await request(`/api/photos?shoot=${encodeURIComponent(state.activeShoot.path)}`)).photos;
+  if (state.view === 'shoots' && !state.activeShoot) return;
+  const path = state.view === 'shoots'
+    ? `/api/photos?shoot=${encodeURIComponent(state.activeShoot.path)}`
+    : `/api/all-photos${state.view === 'issues' ? '?issues=1' : ''}`;
+  state.photos = (await request(path)).photos;
   renderPhotos();
 }
 
@@ -140,15 +156,15 @@ $('#add-tag').addEventListener('click', addManualTag);
 $('#new-tag').addEventListener('keydown', (event) => { if (event.key === 'Enter') { event.preventDefault(); addManualTag(); } });
 $('#promote-all').addEventListener('click', () => { draftManualTags = [...new Set([...draftManualTags, ...draftGeneratedTags])]; draftGeneratedTags = []; renderEditorTags(); });
 $('#save-photo').addEventListener('click', async () => {
-  if (!editingPhoto || !state.activeShoot) return;
+  if (!editingPhoto) return;
   const status = $('#save-status'); status.textContent = 'saving metadata';
   try {
     const metadataResult = await post('/api/photo', {
-      shoot: state.activeShoot.path, id: editingPhoto.id, manualTags: draftManualTags, generatedTags: draftGeneratedTags,
+      shoot: editingPhoto.shoot, id: editingPhoto.id, manualTags: draftManualTags, generatedTags: draftGeneratedTags,
       description: $('#editor-description').value, shotScale: $('#editor-shot').value, peopleCount: $('#editor-people').value,
     });
     state.metadataDirty = metadataResult.metadataDirty;
-    await stagePublication([{ shoot: state.activeShoot.path, id: editingPhoto.id, published: $('#editor-published').checked }]);
+    await stagePublication([{ shoot: editingPhoto.shoot, id: editingPhoto.id, published: $('#editor-published').checked }]);
     editor.close();
   } catch (error) { status.textContent = error.message; }
 });
@@ -157,7 +173,7 @@ async function updateSelection(published) {
   const selected = state.photos.filter((photo) => state.selected.has(keyFor(photo)));
   if (!selected.length) return;
   try {
-    await stagePublication(selected.map((photo) => ({ shoot: state.activeShoot.path, id: photo.id, published })));
+    await stagePublication(selected.map((photo) => ({ shoot: photo.shoot, id: photo.id, published })));
     state.selected.clear(); renderPhotos();
   } catch (error) { $('#selection-count').textContent = error.message; }
 }
@@ -245,9 +261,10 @@ $('#apply-changes').addEventListener('click', async () => {
   try {
     const result = await streamApply();
     state.draft = []; state.metadataDirty = []; state.selected.clear(); state.releasePending = false;
-    renderDraft(); await loadShoots(state.activeShoot?.path);
     $('#apply-status').textContent = `${result.appliedCount} publication changes and ${result.metadataCount} metadata updates published.`;
     $('#publish-title').textContent = 'published'; $('#publish-result').textContent = 'The push completed and GitHub Pages deployment was triggered.';
+    $('#close-publish').disabled = false; $('#finish-publish').disabled = false;
+    renderDraft(); await loadShoots(state.activeShoot?.path);
   } catch (error) {
     appendPublishLog(error.message, 'error'); $('#apply-status').textContent = error.message;
     $('#publish-title').textContent = 'publication failed'; $('#publish-result').textContent = 'Changes were kept. Fix the error and try Apply again.';
@@ -256,15 +273,28 @@ $('#apply-changes').addEventListener('click', async () => {
 });
 
 async function selectShoot(shoot) {
-  state.activeShoot = shoot; state.selected.clear(); renderShoots();
+  state.view = 'shoots'; state.activeShoot = shoot; state.selected.clear(); renderShoots();
   titleNode.textContent = shoot.name;
   metaNode.textContent = `folder ${shoot.sourceTier} · ${shoot.publishedCount} on current site · ${shoot.metadataCount} metadata files`;
   emptyNode.hidden = false; emptyNode.textContent = 'loading photos'; gridNode.replaceChildren();
   await reloadPhotos();
 }
 
+async function selectCollection(view) {
+  state.view = view; state.activeShoot = null; state.selected.clear(); renderShoots();
+  titleNode.textContent = view === 'issues' ? 'problem photos' : 'all photos';
+  metaNode.textContent = view === 'issues' ? 'missing analysis, embeddings, visual metrics, tags, or descriptions' : `${state.shoots.reduce((sum, shoot) => sum + shoot.photoCount, 0)} photos across ${state.shoots.length} shoots`;
+  emptyNode.hidden = false; emptyNode.textContent = 'loading photos'; gridNode.replaceChildren();
+  await reloadPhotos();
+}
+
+$('#view-shoots').addEventListener('click', () => selectShoot(state.shoots[0]));
+$('#view-all').addEventListener('click', () => selectCollection('all'));
+$('#view-issues').addEventListener('click', () => selectCollection('issues'));
+
 async function loadShoots(preferred = null) {
   state.shoots = (await request('/api/shoots')).shoots; renderShoots();
+  if (state.view !== 'shoots') { await selectCollection(state.view); return; }
   const shoot = state.shoots.find((item) => item.path === preferred) || state.shoots[0];
   if (shoot) await selectShoot(shoot);
 }

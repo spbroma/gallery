@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-07T21:58:50.678585+00:00",
+  "generatedAt": "2026-09-07T22:21:33.138878+00:00",
   "metric": "cosine",
   "neighborCount": 10,
   "photoCount": 136,
-  "embeddingCount": 133,
-  "missingEmbeddingCount": 3,
+  "embeddingCount": 136,
+  "missingEmbeddingCount": 0,
   "neighbors": {
     "2026-06-13/dsc04800": [
       "2026-08-11/dsc01108",
@@ -26,10 +26,10 @@
       "2026-06-13/dsc05052",
       "2026-06-18-munich-reflections/dsc05628",
       "2026-07-05-tollwood-rain-street-guitar/dsc07898",
+      "2026-08-15-sailing/dsc01590-1",
       "2026-07-23/dsc09390",
       "2026-08-11/dsc01006",
-      "2026-06-26-munich-heat/dsc05690",
-      "2026-06-18-munich-reflections/dsc05494"
+      "2026-06-26-munich-heat/dsc05690"
     ],
     "2026-06-13/dsc04828": [
       "2026-07-05-tollwood-rain-street-guitar/dsc07374",
@@ -1123,9 +1123,42 @@
       "2026-06-18-munich-reflections/dsc05628",
       "2026-08-19-bonn/dsc02865"
     ],
-    "2026-08-12/dsc01259": [],
-    "2026-08-15-sailing/dsc01453": [],
-    "2026-08-15-sailing/dsc01590-1": [],
+    "2026-08-12/dsc01259": [
+      "2026-08-21-florence/dsc04838",
+      "2026-06-28-pride-augsburg/dsc06695",
+      "2026-07-23/dsc09787-1",
+      "2026-07-19/dsc09261",
+      "2026-07-23/dsc09888",
+      "2026-07-05-tollwood-rain-street-guitar/dsc06960",
+      "2026-07-23/dsc09767",
+      "2026-07-23/dsc09390",
+      "2026-07-23/dsc09764",
+      "2026-07-23/dsc09824"
+    ],
+    "2026-08-15-sailing/dsc01453": [
+      "2026-08-15-sailing/dsc01590-1",
+      "2026-06-18-munich-reflections/dsc05560",
+      "2026-08-21-florence/dsc04308",
+      "2026-06-26-munich-heat/dsc05690",
+      "2026-08-30-regensburg/dsc07553",
+      "2026-07-19/dsc08851",
+      "2026-06-13/dsc05052",
+      "2026-07-23/dsc09390",
+      "2026-07-05-tollwood-rain-street-guitar/dsc07554",
+      "2026-07-23/dsc09888"
+    ],
+    "2026-08-15-sailing/dsc01590-1": [
+      "2026-08-15-sailing/dsc01453",
+      "2026-06-13/dsc04819",
+      "2026-07-23/dsc09824",
+      "2026-08-30-regensburg/dsc08220",
+      "2026-06-26-munich-heat/dsc05690",
+      "2026-06-13/dsc05052",
+      "2026-07-23/dsc09767",
+      "2026-07-23/dsc09390",
+      "2026-08-30-regensburg/dsc07666",
+      "2026-07-23/dsc09888"
+    ],
     "2026-08-19-bonn/dsc02031": [
       "2026-06-28-pride-augsburg/dsc06691",
       "2026-06-28-pride-augsburg/dsc06695",
