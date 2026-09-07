@@ -5,5 +5,6 @@
   "analysisPython": ".venv-analysis/bin/python",
   "gitRemote": "origin",
   "gitBranch": "main",
-  "commitMessageTemplate": "Publish {shoot}"
+  "commitMessageTemplate": "Publish {shoot}",
+  "adminCommitMessage": "Update photo gallery from admin"
 }

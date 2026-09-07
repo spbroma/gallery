@@ -289,6 +289,7 @@ def main() -> None:
                     "id": identifier,
                     "albumId": album_id,
                     "date": date,
+                    "description": editorial.get("description") or analysis.get("description", semantic.get("description", "")),
                     "visual": {
                         "brightness": visual.get("brightness", 0.5),
                         "colorfulness": visual.get("colorfulness", 0),

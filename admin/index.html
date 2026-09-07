@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>photo archive</h1>
-    <div class="header-state"><span id="result-count">loading</span><span class="status-dot"></span>local</div>
+    <div class="header-actions"><button id="review-button" type="button" disabled>review changes <span id="draft-count">0</span></button><div class="header-state"><span id="result-count">loading</span><span class="status-dot"></span>local</div></div>
   </header>
   <main>
     <aside>
@@ -23,6 +23,7 @@
           <p id="shoot-meta"></p>
         </div>
         <div class="toolbar-actions">
+          <div id="selection-actions" class="selection-actions" hidden><span id="selection-count"></span><button id="select-publish" type="button">publish</button><button id="select-hide" type="button">remove from site</button><button id="clear-selection" type="button">clear</button></div>
           <label><span>show</span><select id="visibility-filter"><option value="all">all photos</option><option value="published">published</option><option value="hidden">not published</option></select></label>
           <input id="tag-filter" type="search" placeholder="filter tags" aria-label="Filter tags">
         </div>
@@ -32,13 +33,13 @@
     </section>
   </main>
   <template id="photo-template">
-    <button class="photo-card" type="button">
-      <div class="photo-wrap"><img alt="" loading="lazy"><span class="publish-state"></span></div>
-      <div class="photo-info">
-        <div class="photo-name"></div>
-        <div class="tag-list"></div>
-      </div>
-    </button>
+    <div class="photo-card">
+      <label class="select-photo"><input type="checkbox"><span></span></label>
+      <button class="photo-open" type="button">
+        <div class="photo-wrap"><img alt="" loading="lazy"><span class="publish-state"></span><span class="pending-state">pending</span></div>
+        <div class="photo-info"><div class="photo-name"></div><div class="tag-list"></div></div>
+      </button>
+    </div>
   </template>
   <dialog id="editor">
     <form method="dialog" id="editor-form">
@@ -57,8 +58,22 @@
           <div class="tag-editor"><div class="field-heading"><span>generated tags</span><small>click to make manual</small></div><div id="generated-tags" class="editable-tags generated"></div></div>
         </div>
       </div>
-      <div class="editor-actions"><span id="save-status"></span><button class="secondary" value="cancel">cancel</button><button id="save-photo" type="button">save changes</button></div>
+      <div class="editor-actions"><span id="save-status"></span><button class="secondary" value="cancel">cancel</button><button id="save-photo" type="button">save metadata</button></div>
     </form>
+  </dialog>
+  <dialog id="review-dialog" class="review-dialog">
+    <div class="review-shell">
+      <div class="editor-topbar"><div><span class="eyebrow">changes to sync</span><h2>review changes</h2></div><button id="close-review" class="icon-button" type="button" aria-label="Close review">×</button></div>
+      <div id="review-list" class="review-list"></div>
+      <div class="review-actions"><span id="apply-status">Nothing has been changed yet.</span><button id="discard-all" class="secondary" type="button">discard publication changes</button><button id="apply-changes" type="button">apply &amp; publish</button></div>
+    </div>
+  </dialog>
+  <dialog id="publish-dialog" class="publish-dialog">
+    <div class="publish-shell">
+      <div class="editor-topbar"><div><span class="eyebrow">site publication</span><h2 id="publish-title">publishing…</h2></div><button id="close-publish" class="icon-button" type="button" aria-label="Close publication log" disabled>×</button></div>
+      <pre id="publish-log" aria-live="polite"></pre>
+      <div class="publish-actions"><span id="publish-result">Please keep this window open.</span><button id="finish-publish" type="button" disabled>close</button></div>
+    </div>
   </dialog>
   <script src="/assets/app.js"></script>
 </body>
