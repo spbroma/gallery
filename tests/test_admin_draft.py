@@ -93,6 +93,22 @@ class AdminDraftTests(unittest.TestCase):
         self.library.stage([{'shoot': '2026/shoot', 'id': 'a', 'published': True}])
         self.assertEqual([item['id'] for item in self.library.all_photos(True)], ['a'])
 
+    def test_tag_manager_renames_generated_tag_as_manual_and_deletes(self):
+        summary = {entry['tag']: entry for entry in self.library.tags_summary()}
+        self.assertEqual(summary['old']['manualCount'], 1)
+        self.assertEqual(summary['model']['generatedCount'], 1)
+        result = self.library.manage_tag({'action': 'rename', 'tag': 'model', 'newTag': 'subject'})
+        self.assertEqual(result['affectedCount'], 1)
+        tags = json.loads(self.sidecar.read_text())['tags']
+        self.assertEqual(tags, {'manual': ['old', 'subject'], 'generated': []})
+        result = self.library.manage_tag({'action': 'delete', 'tag': 'old'})
+        self.assertEqual(result['affectedCount'], 1)
+        self.assertEqual(json.loads(self.sidecar.read_text())['tags']['manual'], ['subject'])
+
+    def test_tagged_photos_returns_exact_matches(self):
+        self.assertEqual([photo['id'] for photo in self.library.tagged_photos('model')], ['a'])
+        self.assertEqual(self.library.tagged_photos('missing'), [])
+
 
 if __name__ == '__main__':
     unittest.main()

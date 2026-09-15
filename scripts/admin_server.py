@@ -171,6 +171,77 @@ class Library:
             photos = [photo for photo in photos if photo["published"] and photo["issues"]]
         return photos
 
+    def tags_summary(self) -> list[dict[str, Any]]:
+        summary: dict[str, dict[str, Any]] = {}
+        for photo in self.all_photos():
+            manual = set(photo["manualTags"])
+            generated = set(photo["generatedTags"]) - manual
+            for tag in manual | generated:
+                entry = summary.setdefault(tag, {"tag": tag, "count": 0, "manualCount": 0, "generatedCount": 0, "publishedCount": 0})
+                entry["count"] += 1
+                entry["manualCount"] += int(tag in manual)
+                entry["generatedCount"] += int(tag in generated)
+                entry["publishedCount"] += int(photo["published"])
+        return sorted(summary.values(), key=lambda entry: (-entry["count"], entry["tag"]))
+
+    def tagged_photos(self, value: str) -> list[dict[str, Any]]:
+        tags = validate_tags([value])
+        if not tags:
+            raise ValueError("Invalid tag")
+        tag = tags[0]
+        return [
+            photo for photo in self.all_photos()
+            if tag in photo["manualTags"] or tag in photo["generatedTags"]
+        ]
+
+    def manage_tag(self, payload: dict[str, Any]) -> dict[str, Any]:
+        action = str(payload.get("action", ""))
+        old_values = validate_tags([payload.get("tag", "")])
+        if not old_values or action not in {"rename", "delete"}:
+            raise ValueError("Invalid tag operation")
+        old_tag = old_values[0]
+        new_tag = ""
+        if action == "rename":
+            new_values = validate_tags([payload.get("newTag", "")])
+            if not new_values:
+                raise ValueError("The new tag is empty or invalid")
+            new_tag = new_values[0]
+            if new_tag == old_tag:
+                raise ValueError("The new tag is unchanged")
+
+        affected = 0
+        with self.lock:
+            for shoot, source in discover_shoots(self.archive):
+                relative = shoot.relative_to(self.archive).as_posix()
+                for image in image_files(source):
+                    path = metadata_path(shoot, image)
+                    document = read_json(path)
+                    tags = document.get("tags", {})
+                    manual = validate_tags(tags.get("manual", []))
+                    generated = validate_tags(tags.get("generated", []))
+                    if old_tag not in manual and old_tag not in generated:
+                        continue
+                    manual = [tag for tag in manual if tag != old_tag]
+                    generated = [tag for tag in generated if tag not in {old_tag, new_tag}]
+                    if action == "rename" and new_tag not in manual:
+                        manual.append(new_tag)
+                    document["tags"] = {"manual": manual, "generated": generated}
+                    write_json_atomic(path, document)
+                    identifier = photo_id(image)
+                    key = f"{relative}/{identifier}"
+                    existing = self.metadata_dirty.get(key, {})
+                    self.metadata_dirty[key] = {
+                        "key": key,
+                        "shoot": relative,
+                        "id": identifier,
+                        "file": image.name,
+                        "preview": f"/api/preview?shoot={quote(relative)}&id={quote(identifier)}",
+                        "fields": sorted(set(existing.get("fields", [])) | {"manualTags", "generatedTags"}),
+                    }
+                    affected += 1
+            self.persist_draft()
+        return {"affectedCount": affected, "tags": self.tags_summary(), **self.draft_state()}
+
     def analysis_targets(self) -> list[tuple[Path, list[str]]]:
         targets: list[tuple[Path, list[str]]] = []
         for shoot, source in discover_shoots(self.archive):
@@ -449,6 +520,10 @@ class Handler(BaseHTTPRequestHandler):
             elif parsed.path == "/api/all-photos":
                 issues_only = query.get("issues", ["0"])[0] == "1"
                 self.send_json({"photos": self.library.all_photos(issues_only)})
+            elif parsed.path == "/api/tags":
+                self.send_json({"tags": self.library.tags_summary()})
+            elif parsed.path == "/api/tag-photos":
+                self.send_json({"photos": self.library.tagged_photos(query.get("tag", [""])[0])})
             elif parsed.path == "/api/preview":
                 path = self.library.preview(query.get("shoot", [""])[0], query.get("id", [""])[0])
                 self.send_file(path, "image/jpeg")
@@ -467,7 +542,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = urlparse(self.path).path
-        if path not in {"/api/photo", "/api/draft", "/api/draft/discard", "/api/apply"}:
+        if path not in {"/api/photo", "/api/draft", "/api/draft/discard", "/api/tags/manage", "/api/apply"}:
             self.send_error(HTTPStatus.NOT_FOUND)
             return
         try:
@@ -481,6 +556,8 @@ class Handler(BaseHTTPRequestHandler):
             elif path == "/api/draft/discard":
                 self.library.discard(payload.get("keys", []))
                 self.send_json(self.library.draft_state())
+            elif path == "/api/tags/manage":
+                self.send_json(self.library.manage_tag(payload))
             else:
                 self.send_response(HTTPStatus.OK)
                 self.send_header("Content-Type", "application/x-ndjson; charset=utf-8")

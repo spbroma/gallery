@@ -17,6 +17,7 @@
         <button id="view-shoots" class="active" type="button">shoots</button>
         <button id="view-all" type="button">all photos</button>
         <button id="view-issues" type="button">problems <span id="problem-count">0</span></button>
+        <button id="view-tags" type="button">tags</button>
       </div>
       <div id="shoots-panel"><div class="aside-title">shoots</div><nav id="shoots"></nav></div>
     </aside>
@@ -34,6 +35,11 @@
       </div>
       <div id="empty" class="empty">choose a shoot from the left</div>
       <div id="grid" class="photo-grid" aria-live="polite"></div>
+      <section id="tag-manager" class="tag-manager" hidden>
+        <div class="tag-manager-tools"><input id="tag-search" type="search" placeholder="find a tag" aria-label="Find a tag"><span id="tag-status"></span></div>
+        <div class="tag-table-heading"><span>tag</span><span>usage</span><span>edit</span></div>
+        <div id="tag-manager-list"></div>
+      </section>
     </section>
   </main>
   <template id="photo-template">
