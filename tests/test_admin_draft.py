@@ -65,6 +65,22 @@ class AdminDraftTests(unittest.TestCase):
         self.assertIn('analyze_library.py', analysis_command[1])
         self.assertEqual(analysis_command[-2:], ['--photo-id', 'a'])
 
+    def test_apply_creates_missing_sidecar_before_analysis(self):
+        self.sidecar.unlink()
+        self.library.stage([{'shoot': '2026/shoot', 'id': 'a', 'published': True}])
+
+        with patch.object(self.library, 'run_logged', return_value='Published 1 photo') as run:
+            result = self.library.apply(release=False)
+
+        document = json.loads(self.sidecar.read_text())
+        self.assertTrue(document['publication']['published'])
+        self.assertEqual(document['analysis']['status'], 'missing')
+        self.assertEqual(document['source']['path'], '1/a.jpg')
+        self.assertEqual(result['appliedCount'], 1)
+        analysis_command = run.call_args_list[0].args[0]
+        self.assertIn('analyze_library.py', analysis_command[1])
+        self.assertEqual(analysis_command[-2:], ['--photo-id', 'a'])
+
     def test_failed_rebuild_restores_sidecar_and_keeps_draft(self):
         original = self.sidecar.read_bytes()
         self.library.stage([{'shoot': '2026/shoot', 'id': 'a', 'published': True}])

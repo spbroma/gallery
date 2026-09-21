@@ -372,7 +372,31 @@ class Library:
         path = metadata_path(shoot, image)
         document = read_json(path)
         if not document:
-            raise ValueError(f"Metadata must exist before publication: {identifier}")
+            stat = image.stat()
+            document = {
+                "schemaVersion": SCHEMA_VERSION,
+                "id": identifier,
+                "source": {
+                    "path": image.relative_to(shoot).as_posix(),
+                    "tier": int(source.name),
+                    "sha256": None,
+                    "size": stat.st_size,
+                    "mtimeNs": stat.st_mtime_ns,
+                },
+                "analysis": {
+                    "status": "missing",
+                    "models": {},
+                    "inputMaxEdge": None,
+                    "generatedAt": None,
+                    "description": "",
+                    "semantic": {},
+                    "visual": {},
+                    "embedding": [],
+                },
+                "tags": {"manual": [], "generated": []},
+                "publication": {"published": False},
+                "editorial": {},
+            }
         document.setdefault("publication", {})["published"] = published
         document["publication"]["updatedAt"] = datetime.now(timezone.utc).isoformat()
         write_json_atomic(path, document)
