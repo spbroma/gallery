@@ -6,8 +6,10 @@ import { shuffle } from '../lib/shuffle';
 import { PhotoGrid } from './photo-grid';
 import { navigatorWeights, scrollTarget } from '../lib/navigator';
 import { relatedKeys } from '../lib/related';
+import { similarShuffle } from '../lib/similar-shuffle';
+import { photoHash, photoKeyFromHash } from '../lib/photo-link';
 
-type Photo = { id: string; albumId: string; src: string; thumb: string; date: string; thumbWidth: number; thumbHeight: number };
+type Photo = { id: string; albumId: string; linkId?: string; src: string; thumb: string; date: string; thumbWidth: number; thumbHeight: number };
 type Gallery = { photos: Photo[] };
 type Visual = {
   brightness: number;
@@ -17,12 +19,13 @@ type PhotoMetadata = { key: string; id: string; albumId: string; date: string; v
 type FilterIndex = { photos: PhotoMetadata[] };
 type LibraryPhoto = Photo & { metadata: PhotoMetadata };
 type IndexedPhoto = { photo: LibraryPhoto; index: number };
-type Mode = 'date' | 'light' | 'color' | 'shuffle';
+type Mode = 'date' | 'light' | 'color' | 'shuffle' | 'similar';
 type Direction = 'asc' | 'desc';
 type MobileView = 'feed' | 'grid';
 type NeighborIndex = { neighbors: Record<string, string[]> };
 
 const photoKey = (photo: Photo) => `${photo.albumId}/${photo.id}`;
+const photoLinkId = (photo: Photo) => photo.linkId ?? photoKey(photo);
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const monthNames = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -34,6 +37,7 @@ function dateLabel(date: string) {
 
 function directionLabel(mode: Mode, direction: Direction) {
   if (mode === 'shuffle') return 'random order';
+  if (mode === 'similar') return 'similarity chain';
   if (mode === 'date') return direction === 'asc' ? 'oldest first' : 'newest first';
   if (mode === 'light') return direction === 'asc' ? 'dark to light' : 'light to dark';
   return direction === 'asc' ? 'hue ascending' : 'hue descending';
@@ -64,7 +68,7 @@ function navigatorSegmentStyle(photo: LibraryPhoto, mode: 'light' | 'color') {
 export default function Home() {
   const [photos, setPhotos] = useState<LibraryPhoto[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [mode, setMode] = useState<Mode>('date');
+  const [mode, setMode] = useState<Mode>('shuffle');
   const [shuffledPhotos, setShuffledPhotos] = useState<LibraryPhoto[]>([]);
   const [direction, setDirection] = useState<Direction>('desc');
   const [mobileView, setMobileView] = useState<MobileView>('grid');
@@ -80,6 +84,7 @@ export default function Home() {
   const [lightboxControls, setLightboxControls] = useState(false);
   const touchStart = useRef<number | null>(null);
   const suppressTap = useRef(false);
+  const backgroundHash = useRef('');
 
   useEffect(() => {
     const controls = controlsRef.current;
@@ -108,10 +113,12 @@ export default function Home() {
     ])
       .then(([gallery, index]) => {
         const metadata = new Map(index.photos.map((photo) => [`${photo.albumId}/${photo.id}`, photo]));
-        setPhotos(gallery.photos.flatMap((photo) => {
+        const libraryPhotos = gallery.photos.flatMap((photo) => {
           const match = metadata.get(`${photo.albumId}/${photo.id}`);
           return match ? [{ ...photo, metadata: match }] : [];
-        }));
+        });
+        setPhotos(libraryPhotos);
+        setShuffledPhotos(shuffle(libraryPhotos));
       })
       .catch(() => setPhotos([]))
       .finally(() => setLoaded(true));
@@ -133,7 +140,7 @@ export default function Home() {
   }, []);
 
   const sortedPhotos = useMemo(() => {
-    if (mode === 'shuffle') return shuffledPhotos;
+    if (mode === 'shuffle' || mode === 'similar') return shuffledPhotos;
     const result = [...photos];
     return result.sort((a, b) => {
       let comparison = 0;
@@ -147,25 +154,52 @@ export default function Home() {
 
   const activePhoto = activeIndex === null ? null : sortedPhotos[activeIndex];
   const photoIndices = useMemo(() => new Map(sortedPhotos.map((photo, index) => [photoKey(photo), index])), [sortedPhotos]);
+  const photoLinkIndices = useMemo(() => new Map(sortedPhotos.map((photo, index) => [photoLinkId(photo), index])), [sortedPhotos]);
   const relatedIndices = activePhoto ? relatedKeys(
     neighborIndex[photoKey(activePhoto)] ?? [], photoKey(activePhoto),
     previousPhotoIndex === null ? null : photoKey(sortedPhotos[previousPhotoIndex]),
     new Set(photoIndices.keys()),
   ).map((key) => photoIndices.get(key)!) : [];
 
+  const replaceHash = useCallback((hash: string) => {
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setActiveIndex(null);
+    replaceHash(backgroundHash.current);
+  }, [replaceHash]);
+
+  const openPhoto = useCallback((index: number) => {
+    const photo = sortedPhotos[index];
+    if (!photo) return;
+    if (photoKeyFromHash(window.location.hash) === null) backgroundHash.current = window.location.hash;
+    replaceHash(photoHash(photoLinkId(photo)));
+    setActiveIndex(index);
+    setExploreHistory([]);
+    setPreviousPhotoIndex(null);
+    setLightboxControls(false);
+  }, [replaceHash, sortedPhotos]);
+
   const visitPhoto = useCallback((index: number) => {
     if (index === activeIndex) return;
+    const photo = sortedPhotos[index];
+    if (!photo) return;
     if (activeIndex !== null) setExploreHistory((history) => [...history, activeIndex]);
     setPreviousPhotoIndex(activeIndex);
     setActiveIndex(index);
-  }, [activeIndex]);
+    replaceHash(photoHash(photoLinkId(photo)));
+  }, [activeIndex, replaceHash, sortedPhotos]);
 
   const goBack = () => {
     const index = exploreHistory.at(-1);
     if (index === undefined) return;
+    const photo = sortedPhotos[index];
+    if (!photo) return;
     setExploreHistory((history) => history.slice(0, -1));
     setPreviousPhotoIndex(activeIndex);
     setActiveIndex(index);
+    replaceHash(photoHash(photoLinkId(photo)));
   };
 
   // Shortest-column placement preserves the sorted top-to-bottom order,
@@ -195,15 +229,37 @@ export default function Home() {
   }, [mode, sortedPhotos, mobileView]);
 
   useEffect(() => {
+    const syncPhotoFromHash = () => {
+      const key = photoKeyFromHash(window.location.hash);
+      if (key === null) {
+        setActiveIndex(null);
+        return;
+      }
+      const index = photoLinkIndices.get(key) ?? photoIndices.get(key);
+      if (index === undefined) {
+        setActiveIndex(null);
+        return;
+      }
+      setActiveIndex(index);
+      setExploreHistory([]);
+      setPreviousPhotoIndex(null);
+      setLightboxControls(false);
+    };
+    syncPhotoFromHash();
+    window.addEventListener('hashchange', syncPhotoFromHash);
+    return () => window.removeEventListener('hashchange', syncPhotoFromHash);
+  }, [photoIndices, photoLinkIndices]);
+
+  useEffect(() => {
     if (activeIndex === null) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setActiveIndex(null);
+      if (event.key === 'Escape') closeLightbox();
       if (event.key === 'ArrowRight') visitPhoto((activeIndex + 1) % sortedPhotos.length);
       if (event.key === 'ArrowLeft') visitPhoto((activeIndex - 1 + sortedPhotos.length) % sortedPhotos.length);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [activeIndex, sortedPhotos.length, visitPhoto]);
+  }, [activeIndex, closeLightbox, sortedPhotos.length, visitPhoto]);
 
   const groups = useMemo(() => {
     const result: { key: string; label: string; photos: IndexedPhoto[] }[] = [];
@@ -241,7 +297,7 @@ export default function Home() {
     if (window.matchMedia('(max-width: 640px)').matches) {
       setLightboxControls((visible) => !visible);
     } else {
-      setActiveIndex(null);
+      closeLightbox();
     }
   };
 
@@ -263,7 +319,7 @@ export default function Home() {
 
   const renderPhotos = (items: IndexedPhoto[]) => (
     <PhotoGrid items={items} mobileView={mobileView} basePath={basePath}
-      onOpen={(index) => { setActiveIndex(index); setExploreHistory([]); setPreviousPhotoIndex(null); setLightboxControls(false); }} />
+      onOpen={openPhoto} />
   );
 
   return (
@@ -280,6 +336,10 @@ export default function Home() {
             setShuffledPhotos(shuffle(photos));
             setMode('shuffle');
           }}><span>random shuffle</span></button>
+          <button className="shuffle-button" type="button" disabled={!loaded || photos.length < 2 || Object.keys(neighborIndex).length === 0} aria-pressed={mode === 'similar'} onClick={() => {
+            setShuffledPhotos(similarShuffle(photos, neighborIndex, photoKey));
+            setMode('similar');
+          }}><span>similar shuffle</span></button>
           <div className={`mode-control${expandedSort ? ' expanded' : ''}`} ref={sortRef}>
             <span className="sort-label">sort</span>
             <div className="sort-options" role="group" aria-label="Sort">
@@ -292,9 +352,10 @@ export default function Home() {
               <option value="light">light</option>
               <option value="color">color</option>
               {mode === 'shuffle' && <option value="shuffle" disabled>random</option>}
+              {mode === 'similar' && <option value="similar" disabled>similar</option>}
             </select>
           </div>
-          <button className="direction-toggle" type="button" disabled={mode === 'shuffle'} aria-label={directionLabel(mode, direction)} title={directionLabel(mode, direction)} onClick={() => setDirection((current) => current === 'asc' ? 'desc' : 'asc')}>
+          <button className="direction-toggle" type="button" disabled={mode === 'shuffle' || mode === 'similar'} aria-label={directionLabel(mode, direction)} title={directionLabel(mode, direction)} onClick={() => setDirection((current) => current === 'asc' ? 'desc' : 'asc')}>
             {direction === 'asc' ? '↑' : '↓'}
           </button>
         </div>
@@ -348,7 +409,7 @@ export default function Home() {
 
       {activePhoto && (
         <div className={`lightbox${lightboxControls ? ' controls-visible' : ''}${relatedIndices.length || exploreHistory.length ? ' has-related' : ''}${relatedExpanded ? '' : ' related-collapsed'}`} role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onLightboxTap} onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={onTouchEnd}>
-          <button className="close" type="button" aria-label="Close" onClick={(event) => { event.stopPropagation(); setActiveIndex(null); }}>×</button>
+          <button className="close" type="button" aria-label="Close" onClick={(event) => { event.stopPropagation(); closeLightbox(); }}>×</button>
           <button className="previous" type="button" aria-label="Previous photo" onClick={(event) => { event.stopPropagation(); move(-1); }}>‹</button>
           <img className="lightbox-photo" src={`${basePath}${activePhoto.src}`} alt="" onClick={(event) => {
             event.stopPropagation();

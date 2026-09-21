@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-21T20:06:35.830832+00:00",
+  "generatedAt": "2026-09-21T20:33:42.014501+00:00",
   "source": "local",
   "albums": [
     {
@@ -327,6 +327,8 @@
     {
       "id": "dsc00081",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-150333",
+      "capturedAt": "2026-09-19T15:03:33",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc00081.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc00081.webp",
       "thumbWidth": 900,
@@ -359,6 +361,8 @@
     {
       "id": "dsc00789",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-152712",
+      "capturedAt": "2026-09-19T15:27:12",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc00789.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc00789.webp",
       "thumbWidth": 900,
@@ -389,6 +393,8 @@
     {
       "id": "dsc00888",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-153057",
+      "capturedAt": "2026-09-19T15:30:57",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc00888.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc00888.webp",
       "thumbWidth": 900,
@@ -417,6 +423,8 @@
     {
       "id": "dsc00978",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-153407",
+      "capturedAt": "2026-09-19T15:34:07",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc00978.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc00978.webp",
       "thumbWidth": 900,
@@ -447,6 +455,8 @@
     {
       "id": "dsc01103",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-153620",
+      "capturedAt": "2026-09-19T15:36:20",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc01103.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc01103.webp",
       "thumbWidth": 900,
@@ -476,6 +486,8 @@
     {
       "id": "dsc01223",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-153937",
+      "capturedAt": "2026-09-19T15:39:37",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc01223.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc01223.webp",
       "thumbWidth": 900,
@@ -505,6 +517,8 @@
     {
       "id": "dsc09059",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-135846",
+      "capturedAt": "2026-09-19T13:58:46",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc09059.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc09059.webp",
       "thumbWidth": 900,
@@ -533,6 +547,8 @@
     {
       "id": "dsc09145",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-142029",
+      "capturedAt": "2026-09-19T14:20:29",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc09145.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc09145.webp",
       "thumbWidth": 900,
@@ -562,6 +578,8 @@
     {
       "id": "dsc09244",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-142412",
+      "capturedAt": "2026-09-19T14:24:12",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc09244.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc09244.webp",
       "thumbWidth": 900,
@@ -588,6 +606,8 @@
     {
       "id": "dsc09341",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-143834",
+      "capturedAt": "2026-09-19T14:38:34",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc09341.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc09341.webp",
       "thumbWidth": 900,
@@ -618,6 +638,8 @@
     {
       "id": "dsc09526",
       "albumId": "2026-09-20-octoberfest-pt-1",
+      "linkId": "20260919-144426",
+      "capturedAt": "2026-09-19T14:44:26",
       "src": "/gallery/2026-09-20-octoberfest-pt-1/web/dsc09526.webp",
       "thumb": "/gallery/2026-09-20-octoberfest-pt-1/thumbs/dsc09526.webp",
       "thumbWidth": 900,
@@ -648,6 +670,8 @@
     {
       "id": "dsc08700",
       "albumId": "2026-09-15-berlin-blizzard",
+      "linkId": "20260912-163441",
+      "capturedAt": "2026-09-12T16:34:41",
       "src": "/gallery/2026-09-15-berlin-blizzard/web/dsc08700.webp",
       "thumb": "/gallery/2026-09-15-berlin-blizzard/thumbs/dsc08700.webp",
       "thumbWidth": 900,
@@ -676,6 +700,8 @@
     {
       "id": "dsc08894",
       "albumId": "2026-09-15-berlin-blizzard",
+      "linkId": "20260912-164852",
+      "capturedAt": "2026-09-12T16:48:52",
       "src": "/gallery/2026-09-15-berlin-blizzard/web/dsc08894.webp",
       "thumb": "/gallery/2026-09-15-berlin-blizzard/thumbs/dsc08894.webp",
       "thumbWidth": 900,
@@ -707,6 +733,8 @@
     {
       "id": "dsc08993",
       "albumId": "2026-09-15-berlin-blizzard",
+      "linkId": "20260912-170709",
+      "capturedAt": "2026-09-12T17:07:09",
       "src": "/gallery/2026-09-15-berlin-blizzard/web/dsc08993.webp",
       "thumb": "/gallery/2026-09-15-berlin-blizzard/thumbs/dsc08993.webp",
       "thumbWidth": 900,
@@ -739,6 +767,8 @@
     {
       "id": "dsc09024",
       "albumId": "2026-09-15-berlin-blizzard",
+      "linkId": "20260913-143131",
+      "capturedAt": "2026-09-13T14:31:31",
       "src": "/gallery/2026-09-15-berlin-blizzard/web/dsc09024.webp",
       "thumb": "/gallery/2026-09-15-berlin-blizzard/thumbs/dsc09024.webp",
       "thumbWidth": 900,
@@ -769,6 +799,8 @@
     {
       "id": "dsc07509",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-151558",
+      "capturedAt": "2026-08-29T15:15:58",
       "src": "/gallery/2026-08-30-regensburg/web/dsc07509.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc07509.webp",
       "thumbWidth": 600,
@@ -798,6 +830,8 @@
     {
       "id": "dsc07553",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-155232",
+      "capturedAt": "2026-08-29T15:52:32",
       "src": "/gallery/2026-08-30-regensburg/web/dsc07553.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc07553.webp",
       "thumbWidth": 600,
@@ -828,6 +862,8 @@
     {
       "id": "dsc07562",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-155319",
+      "capturedAt": "2026-08-29T15:53:19",
       "src": "/gallery/2026-08-30-regensburg/web/dsc07562.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc07562.webp",
       "thumbWidth": 900,
@@ -857,6 +893,8 @@
     {
       "id": "dsc07666",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-160503",
+      "capturedAt": "2026-08-29T16:05:03",
       "src": "/gallery/2026-08-30-regensburg/web/dsc07666.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc07666.webp",
       "thumbWidth": 900,
@@ -886,6 +924,8 @@
     {
       "id": "dsc07679",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-160554",
+      "capturedAt": "2026-08-29T16:05:54",
       "src": "/gallery/2026-08-30-regensburg/web/dsc07679.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc07679.webp",
       "thumbWidth": 900,
@@ -918,6 +958,8 @@
     {
       "id": "dsc07837",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-160952",
+      "capturedAt": "2026-08-29T16:09:52",
       "src": "/gallery/2026-08-30-regensburg/web/dsc07837.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc07837.webp",
       "thumbWidth": 600,
@@ -948,6 +990,8 @@
     {
       "id": "dsc08017",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-184212",
+      "capturedAt": "2026-08-29T18:42:12",
       "src": "/gallery/2026-08-30-regensburg/web/dsc08017.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc08017.webp",
       "thumbWidth": 900,
@@ -980,6 +1024,8 @@
     {
       "id": "dsc08148",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-184906",
+      "capturedAt": "2026-08-29T18:49:06",
       "src": "/gallery/2026-08-30-regensburg/web/dsc08148.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc08148.webp",
       "thumbWidth": 900,
@@ -1011,6 +1057,8 @@
     {
       "id": "dsc08220",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260829-191509",
+      "capturedAt": "2026-08-29T19:15:09",
       "src": "/gallery/2026-08-30-regensburg/web/dsc08220.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc08220.webp",
       "thumbWidth": 900,
@@ -1042,6 +1090,8 @@
     {
       "id": "dsc08340",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260830-132358",
+      "capturedAt": "2026-08-30T13:23:58",
       "src": "/gallery/2026-08-30-regensburg/web/dsc08340.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc08340.webp",
       "thumbWidth": 900,
@@ -1071,6 +1121,8 @@
     {
       "id": "dsc08358",
       "albumId": "2026-08-30-regensburg",
+      "linkId": "20260830-132646",
+      "capturedAt": "2026-08-30T13:26:46",
       "src": "/gallery/2026-08-30-regensburg/web/dsc08358.webp",
       "thumb": "/gallery/2026-08-30-regensburg/thumbs/dsc08358.webp",
       "thumbWidth": 900,
@@ -1102,6 +1154,8 @@
     {
       "id": "dsc04302",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260821-180419",
+      "capturedAt": "2026-08-21T18:04:19",
       "src": "/gallery/2026-08-21-florence/web/dsc04302.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc04302.webp",
       "thumbWidth": 600,
@@ -1131,6 +1185,8 @@
     {
       "id": "dsc04308",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260821-180936",
+      "capturedAt": "2026-08-21T18:09:36",
       "src": "/gallery/2026-08-21-florence/web/dsc04308.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc04308.webp",
       "thumbWidth": 900,
@@ -1162,6 +1218,8 @@
     {
       "id": "dsc04438",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260821-182145",
+      "capturedAt": "2026-08-21T18:21:45",
       "src": "/gallery/2026-08-21-florence/web/dsc04438.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc04438.webp",
       "thumbWidth": 900,
@@ -1192,6 +1250,8 @@
     {
       "id": "dsc04670",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260821-183852",
+      "capturedAt": "2026-08-21T18:38:52",
       "src": "/gallery/2026-08-21-florence/web/dsc04670.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc04670.webp",
       "thumbWidth": 600,
@@ -1224,6 +1284,8 @@
     {
       "id": "dsc04838",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260821-185627",
+      "capturedAt": "2026-08-21T18:56:27",
       "src": "/gallery/2026-08-21-florence/web/dsc04838.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc04838.webp",
       "thumbWidth": 900,
@@ -1254,6 +1316,8 @@
     {
       "id": "dsc05256",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260821-191739",
+      "capturedAt": "2026-08-21T19:17:39",
       "src": "/gallery/2026-08-21-florence/web/dsc05256.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc05256.webp",
       "thumbWidth": 900,
@@ -1284,6 +1348,8 @@
     {
       "id": "dsc05467",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260822-150001",
+      "capturedAt": "2026-08-22T15:00:01",
       "src": "/gallery/2026-08-21-florence/web/dsc05467.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc05467.webp",
       "thumbWidth": 900,
@@ -1315,6 +1381,8 @@
     {
       "id": "dsc06044",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260822-190428",
+      "capturedAt": "2026-08-22T19:04:28",
       "src": "/gallery/2026-08-21-florence/web/dsc06044.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc06044.webp",
       "thumbWidth": 900,
@@ -1347,6 +1415,8 @@
     {
       "id": "dsc06134",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260823-140916",
+      "capturedAt": "2026-08-23T14:09:16",
       "src": "/gallery/2026-08-21-florence/web/dsc06134.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc06134.webp",
       "thumbWidth": 900,
@@ -1377,6 +1447,8 @@
     {
       "id": "dsc06793",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260823-172302",
+      "capturedAt": "2026-08-23T17:23:02",
       "src": "/gallery/2026-08-21-florence/web/dsc06793.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc06793.webp",
       "thumbWidth": 600,
@@ -1406,6 +1478,8 @@
     {
       "id": "dsc06851",
       "albumId": "2026-08-21-florence",
+      "linkId": "20260823-173014",
+      "capturedAt": "2026-08-23T17:30:14",
       "src": "/gallery/2026-08-21-florence/web/dsc06851.webp",
       "thumb": "/gallery/2026-08-21-florence/thumbs/dsc06851.webp",
       "thumbWidth": 900,
@@ -1437,6 +1511,8 @@
     {
       "id": "dsc03018",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-074109",
+      "capturedAt": "2026-08-20T07:41:09",
       "src": "/gallery/2026-08-20-milan/web/dsc03018.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03018.webp",
       "thumbWidth": 900,
@@ -1469,6 +1545,8 @@
     {
       "id": "dsc03078",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-133805",
+      "capturedAt": "2026-08-20T13:38:05",
       "src": "/gallery/2026-08-20-milan/web/dsc03078.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03078.webp",
       "thumbWidth": 900,
@@ -1500,6 +1578,8 @@
     {
       "id": "dsc03216",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-135452",
+      "capturedAt": "2026-08-20T13:54:52",
       "src": "/gallery/2026-08-20-milan/web/dsc03216.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03216.webp",
       "thumbWidth": 900,
@@ -1530,6 +1610,8 @@
     {
       "id": "dsc03260",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-140842",
+      "capturedAt": "2026-08-20T14:08:42",
       "src": "/gallery/2026-08-20-milan/web/dsc03260.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03260.webp",
       "thumbWidth": 600,
@@ -1562,6 +1644,8 @@
     {
       "id": "dsc03394",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-145507",
+      "capturedAt": "2026-08-20T14:55:07",
       "src": "/gallery/2026-08-20-milan/web/dsc03394.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03394.webp",
       "thumbWidth": 900,
@@ -1592,6 +1676,8 @@
     {
       "id": "dsc03406",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-145533",
+      "capturedAt": "2026-08-20T14:55:33",
       "src": "/gallery/2026-08-20-milan/web/dsc03406.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03406.webp",
       "thumbWidth": 900,
@@ -1622,6 +1708,8 @@
     {
       "id": "dsc03507",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-150553",
+      "capturedAt": "2026-08-20T15:05:53",
       "src": "/gallery/2026-08-20-milan/web/dsc03507.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03507.webp",
       "thumbWidth": 900,
@@ -1652,6 +1740,8 @@
     {
       "id": "dsc03515",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-150811",
+      "capturedAt": "2026-08-20T15:08:11",
       "src": "/gallery/2026-08-20-milan/web/dsc03515.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03515.webp",
       "thumbWidth": 600,
@@ -1681,6 +1771,8 @@
     {
       "id": "dsc03601",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-153128",
+      "capturedAt": "2026-08-20T15:31:28",
       "src": "/gallery/2026-08-20-milan/web/dsc03601.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03601.webp",
       "thumbWidth": 900,
@@ -1713,6 +1805,8 @@
     {
       "id": "dsc03640",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-153703",
+      "capturedAt": "2026-08-20T15:37:03",
       "src": "/gallery/2026-08-20-milan/web/dsc03640.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03640.webp",
       "thumbWidth": 900,
@@ -1745,6 +1839,8 @@
     {
       "id": "dsc03674-1",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-160335",
+      "capturedAt": "2026-08-20T16:03:35",
       "src": "/gallery/2026-08-20-milan/web/dsc03674-1.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03674-1.webp",
       "thumbWidth": 900,
@@ -1777,6 +1873,8 @@
     {
       "id": "dsc03744",
       "albumId": "2026-08-20-milan",
+      "linkId": "20260820-175805",
+      "capturedAt": "2026-08-20T17:58:05",
       "src": "/gallery/2026-08-20-milan/web/dsc03744.webp",
       "thumb": "/gallery/2026-08-20-milan/thumbs/dsc03744.webp",
       "thumbWidth": 900,
@@ -1807,6 +1905,8 @@
     {
       "id": "dsc02031",
       "albumId": "2026-08-19-bonn",
+      "linkId": "20260816-175330",
+      "capturedAt": "2026-08-16T17:53:30",
       "src": "/gallery/2026-08-19-bonn/web/dsc02031.webp",
       "thumb": "/gallery/2026-08-19-bonn/thumbs/dsc02031.webp",
       "thumbWidth": 900,
@@ -1838,6 +1938,8 @@
     {
       "id": "dsc02188",
       "albumId": "2026-08-19-bonn",
+      "linkId": "20260818-082426",
+      "capturedAt": "2026-08-18T08:24:26",
       "src": "/gallery/2026-08-19-bonn/web/dsc02188.webp",
       "thumb": "/gallery/2026-08-19-bonn/thumbs/dsc02188.webp",
       "thumbWidth": 900,
@@ -1868,6 +1970,8 @@
     {
       "id": "dsc02272",
       "albumId": "2026-08-19-bonn",
+      "linkId": "20260819-083210",
+      "capturedAt": "2026-08-19T08:32:10",
       "src": "/gallery/2026-08-19-bonn/web/dsc02272.webp",
       "thumb": "/gallery/2026-08-19-bonn/thumbs/dsc02272.webp",
       "thumbWidth": 900,
@@ -1899,6 +2003,8 @@
     {
       "id": "dsc02662",
       "albumId": "2026-08-19-bonn",
+      "linkId": "20260819-180754",
+      "capturedAt": "2026-08-19T18:07:54",
       "src": "/gallery/2026-08-19-bonn/web/dsc02662.webp",
       "thumb": "/gallery/2026-08-19-bonn/thumbs/dsc02662.webp",
       "thumbWidth": 900,
@@ -1930,6 +2036,8 @@
     {
       "id": "dsc02865",
       "albumId": "2026-08-19-bonn",
+      "linkId": "20260819-185411",
+      "capturedAt": "2026-08-19T18:54:11",
       "src": "/gallery/2026-08-19-bonn/web/dsc02865.webp",
       "thumb": "/gallery/2026-08-19-bonn/thumbs/dsc02865.webp",
       "thumbWidth": 900,
@@ -1961,6 +2069,8 @@
     {
       "id": "dsc02872",
       "albumId": "2026-08-19-bonn",
+      "linkId": "20260819-190013",
+      "capturedAt": "2026-08-19T19:00:13",
       "src": "/gallery/2026-08-19-bonn/web/dsc02872.webp",
       "thumb": "/gallery/2026-08-19-bonn/thumbs/dsc02872.webp",
       "thumbWidth": 900,
@@ -1992,6 +2102,8 @@
     {
       "id": "dsc01453",
       "albumId": "2026-08-15-sailing",
+      "linkId": "20260815-125321",
+      "capturedAt": "2026-08-15T12:53:21",
       "src": "/gallery/2026-08-15-sailing/web/dsc01453.webp",
       "thumb": "/gallery/2026-08-15-sailing/thumbs/dsc01453.webp",
       "thumbWidth": 900,
@@ -2022,6 +2134,8 @@
     {
       "id": "dsc01590-1",
       "albumId": "2026-08-15-sailing",
+      "linkId": "20260815-125816",
+      "capturedAt": "2026-08-15T12:58:16",
       "src": "/gallery/2026-08-15-sailing/web/dsc01590-1.webp",
       "thumb": "/gallery/2026-08-15-sailing/thumbs/dsc01590-1.webp",
       "thumbWidth": 600,
@@ -2050,6 +2164,8 @@
     {
       "id": "dsc01259",
       "albumId": "2026-08-12",
+      "linkId": "20260812-191252",
+      "capturedAt": "2026-08-12T19:12:52",
       "src": "/gallery/2026-08-12/web/dsc01259.webp",
       "thumb": "/gallery/2026-08-12/thumbs/dsc01259.webp",
       "thumbWidth": 900,
@@ -2078,6 +2194,8 @@
     {
       "id": "dsc00776",
       "albumId": "2026-08-11",
+      "linkId": "20260808-162855",
+      "capturedAt": "2026-08-08T16:28:55",
       "src": "/gallery/2026-08-11/web/dsc00776.webp",
       "thumb": "/gallery/2026-08-11/thumbs/dsc00776.webp",
       "thumbWidth": 900,
@@ -2109,6 +2227,8 @@
     {
       "id": "dsc01006",
       "albumId": "2026-08-11",
+      "linkId": "20260809-175850",
+      "capturedAt": "2026-08-09T17:58:50",
       "src": "/gallery/2026-08-11/web/dsc01006.webp",
       "thumb": "/gallery/2026-08-11/thumbs/dsc01006.webp",
       "thumbWidth": 900,
@@ -2139,6 +2259,8 @@
     {
       "id": "dsc01108",
       "albumId": "2026-08-11",
+      "linkId": "20260811-173223",
+      "capturedAt": "2026-08-11T17:32:23",
       "src": "/gallery/2026-08-11/web/dsc01108.webp",
       "thumb": "/gallery/2026-08-11/thumbs/dsc01108.webp",
       "thumbWidth": 900,
@@ -2171,6 +2293,8 @@
     {
       "id": "dsc01169",
       "albumId": "2026-08-11",
+      "linkId": "20260811-180620",
+      "capturedAt": "2026-08-11T18:06:20",
       "src": "/gallery/2026-08-11/web/dsc01169.webp",
       "thumb": "/gallery/2026-08-11/thumbs/dsc01169.webp",
       "thumbWidth": 600,
@@ -2201,6 +2325,8 @@
     {
       "id": "dsc01191",
       "albumId": "2026-08-11",
+      "linkId": "20260811-184659",
+      "capturedAt": "2026-08-11T18:46:59",
       "src": "/gallery/2026-08-11/web/dsc01191.webp",
       "thumb": "/gallery/2026-08-11/thumbs/dsc01191.webp",
       "thumbWidth": 900,
@@ -2231,6 +2357,8 @@
     {
       "id": "dsc00581",
       "albumId": "2026-08-02",
+      "linkId": "20260802-093018",
+      "capturedAt": "2026-08-02T09:30:18",
       "src": "/gallery/2026-08-02/web/dsc00581.webp",
       "thumb": "/gallery/2026-08-02/thumbs/dsc00581.webp",
       "thumbWidth": 900,
@@ -2263,6 +2391,8 @@
     {
       "id": "dsc00600",
       "albumId": "2026-08-02",
+      "linkId": "20260802-184050",
+      "capturedAt": "2026-08-02T18:40:50",
       "src": "/gallery/2026-08-02/web/dsc00600.webp",
       "thumb": "/gallery/2026-08-02/thumbs/dsc00600.webp",
       "thumbWidth": 900,
@@ -2293,6 +2423,8 @@
     {
       "id": "dsc00677",
       "albumId": "2026-08-02",
+      "linkId": "20260802-184917",
+      "capturedAt": "2026-08-02T18:49:17",
       "src": "/gallery/2026-08-02/web/dsc00677.webp",
       "thumb": "/gallery/2026-08-02/thumbs/dsc00677.webp",
       "thumbWidth": 900,
@@ -2324,6 +2456,8 @@
     {
       "id": "dsc09318",
       "albumId": "2026-07-23",
+      "linkId": "20260721-065610",
+      "capturedAt": "2026-07-21T06:56:10",
       "src": "/gallery/2026-07-23/web/dsc09318.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09318.webp",
       "thumbWidth": 900,
@@ -2353,6 +2487,8 @@
     {
       "id": "dsc09325",
       "albumId": "2026-07-23",
+      "linkId": "20260723-184825",
+      "capturedAt": "2026-07-23T18:48:25",
       "src": "/gallery/2026-07-23/web/dsc09325.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09325.webp",
       "thumbWidth": 600,
@@ -2384,6 +2520,8 @@
     {
       "id": "dsc09360",
       "albumId": "2026-07-23",
+      "linkId": "20260723-191510",
+      "capturedAt": "2026-07-23T19:15:10",
       "src": "/gallery/2026-07-23/web/dsc09360.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09360.webp",
       "thumbWidth": 600,
@@ -2414,6 +2552,8 @@
     {
       "id": "dsc09390",
       "albumId": "2026-07-23",
+      "linkId": "20260723-191711",
+      "capturedAt": "2026-07-23T19:17:11",
       "src": "/gallery/2026-07-23/web/dsc09390.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09390.webp",
       "thumbWidth": 900,
@@ -2445,6 +2585,8 @@
     {
       "id": "dsc09654",
       "albumId": "2026-07-23",
+      "linkId": "20260723-193046",
+      "capturedAt": "2026-07-23T19:30:46",
       "src": "/gallery/2026-07-23/web/dsc09654.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09654.webp",
       "thumbWidth": 900,
@@ -2476,6 +2618,8 @@
     {
       "id": "dsc09764",
       "albumId": "2026-07-23",
+      "linkId": "20260723-193423",
+      "capturedAt": "2026-07-23T19:34:23",
       "src": "/gallery/2026-07-23/web/dsc09764.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09764.webp",
       "thumbWidth": 900,
@@ -2505,6 +2649,8 @@
     {
       "id": "dsc09767",
       "albumId": "2026-07-23",
+      "linkId": "20260723-193458",
+      "capturedAt": "2026-07-23T19:34:58",
       "src": "/gallery/2026-07-23/web/dsc09767.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09767.webp",
       "thumbWidth": 900,
@@ -2535,6 +2681,8 @@
     {
       "id": "dsc09787-1",
       "albumId": "2026-07-23",
+      "linkId": "20260723-194949",
+      "capturedAt": "2026-07-23T19:49:49",
       "src": "/gallery/2026-07-23/web/dsc09787-1.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09787-1.webp",
       "thumbWidth": 900,
@@ -2562,6 +2710,8 @@
     {
       "id": "dsc09824",
       "albumId": "2026-07-23",
+      "linkId": "20260723-195215",
+      "capturedAt": "2026-07-23T19:52:15",
       "src": "/gallery/2026-07-23/web/dsc09824.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09824.webp",
       "thumbWidth": 600,
@@ -2593,6 +2743,8 @@
     {
       "id": "dsc09888",
       "albumId": "2026-07-23",
+      "linkId": "20260723-204445",
+      "capturedAt": "2026-07-23T20:44:45",
       "src": "/gallery/2026-07-23/web/dsc09888.webp",
       "thumb": "/gallery/2026-07-23/thumbs/dsc09888.webp",
       "thumbWidth": 900,
@@ -2624,6 +2776,8 @@
     {
       "id": "dsc08669",
       "albumId": "2026-07-19",
+      "linkId": "20260718-154609",
+      "capturedAt": "2026-07-18T15:46:09",
       "src": "/gallery/2026-07-19/web/dsc08669.webp",
       "thumb": "/gallery/2026-07-19/thumbs/dsc08669.webp",
       "thumbWidth": 900,
@@ -2655,6 +2809,8 @@
     {
       "id": "dsc08851",
       "albumId": "2026-07-19",
+      "linkId": "20260718-192213",
+      "capturedAt": "2026-07-18T19:22:13",
       "src": "/gallery/2026-07-19/web/dsc08851.webp",
       "thumb": "/gallery/2026-07-19/thumbs/dsc08851.webp",
       "thumbWidth": 900,
@@ -2686,6 +2842,8 @@
     {
       "id": "dsc08895",
       "albumId": "2026-07-19",
+      "linkId": "20260718-194016",
+      "capturedAt": "2026-07-18T19:40:16",
       "src": "/gallery/2026-07-19/web/dsc08895.webp",
       "thumb": "/gallery/2026-07-19/thumbs/dsc08895.webp",
       "thumbWidth": 900,
@@ -2717,6 +2875,8 @@
     {
       "id": "dsc09185",
       "albumId": "2026-07-19",
+      "linkId": "20260718-195020",
+      "capturedAt": "2026-07-18T19:50:20",
       "src": "/gallery/2026-07-19/web/dsc09185.webp",
       "thumb": "/gallery/2026-07-19/thumbs/dsc09185.webp",
       "thumbWidth": 600,
@@ -2747,6 +2907,8 @@
     {
       "id": "dsc09261",
       "albumId": "2026-07-19",
+      "linkId": "20260718-212416",
+      "capturedAt": "2026-07-18T21:24:16",
       "src": "/gallery/2026-07-19/web/dsc09261.webp",
       "thumb": "/gallery/2026-07-19/thumbs/dsc09261.webp",
       "thumbWidth": 900,
@@ -2775,6 +2937,8 @@
     {
       "id": "dsc09295",
       "albumId": "2026-07-19",
+      "linkId": "20260718-222037",
+      "capturedAt": "2026-07-18T22:20:37",
       "src": "/gallery/2026-07-19/web/dsc09295.webp",
       "thumb": "/gallery/2026-07-19/thumbs/dsc09295.webp",
       "thumbWidth": 900,
@@ -2806,6 +2970,8 @@
     {
       "id": "dsc08055",
       "albumId": "2026-07-12-dusseldorf",
+      "linkId": "20260710-130608",
+      "capturedAt": "2026-07-10T13:06:08",
       "src": "/gallery/2026-07-12-dusseldorf/web/dsc08055.webp",
       "thumb": "/gallery/2026-07-12-dusseldorf/thumbs/dsc08055.webp",
       "thumbWidth": 600,
@@ -2837,6 +3003,8 @@
     {
       "id": "dsc08091",
       "albumId": "2026-07-12-dusseldorf",
+      "linkId": "20260711-142500",
+      "capturedAt": "2026-07-11T14:25:00",
       "src": "/gallery/2026-07-12-dusseldorf/web/dsc08091.webp",
       "thumb": "/gallery/2026-07-12-dusseldorf/thumbs/dsc08091.webp",
       "thumbWidth": 600,
@@ -2868,6 +3036,8 @@
     {
       "id": "dsc08102",
       "albumId": "2026-07-12-dusseldorf",
+      "linkId": "20260711-152919",
+      "capturedAt": "2026-07-11T15:29:19",
       "src": "/gallery/2026-07-12-dusseldorf/web/dsc08102.webp",
       "thumb": "/gallery/2026-07-12-dusseldorf/thumbs/dsc08102.webp",
       "thumbWidth": 900,
@@ -2897,6 +3067,8 @@
     {
       "id": "dsc08441",
       "albumId": "2026-07-12-dusseldorf",
+      "linkId": "20260712-111634",
+      "capturedAt": "2026-07-12T11:16:34",
       "src": "/gallery/2026-07-12-dusseldorf/web/dsc08441.webp",
       "thumb": "/gallery/2026-07-12-dusseldorf/thumbs/dsc08441.webp",
       "thumbWidth": 600,
@@ -2929,6 +3101,8 @@
     {
       "id": "dsc08460",
       "albumId": "2026-07-12-dusseldorf",
+      "linkId": "20260712-133215",
+      "capturedAt": "2026-07-12T13:32:15",
       "src": "/gallery/2026-07-12-dusseldorf/web/dsc08460.webp",
       "thumb": "/gallery/2026-07-12-dusseldorf/thumbs/dsc08460.webp",
       "thumbWidth": 900,
@@ -2959,6 +3133,8 @@
     {
       "id": "dsc08470",
       "albumId": "2026-07-12-dusseldorf",
+      "linkId": "20260712-192757",
+      "capturedAt": "2026-07-12T19:27:57",
       "src": "/gallery/2026-07-12-dusseldorf/web/dsc08470.webp",
       "thumb": "/gallery/2026-07-12-dusseldorf/thumbs/dsc08470.webp",
       "thumbWidth": 900,
@@ -2996,6 +3172,8 @@
     {
       "id": "dsc06960",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260703-195808",
+      "capturedAt": "2026-07-03T19:58:08",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc06960.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc06960.webp",
       "thumbWidth": 900,
@@ -3026,6 +3204,8 @@
     {
       "id": "dsc07275",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-154157",
+      "capturedAt": "2026-07-05T15:41:57",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07275.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07275.webp",
       "thumbWidth": 900,
@@ -3057,6 +3237,8 @@
     {
       "id": "dsc07356",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-163627",
+      "capturedAt": "2026-07-05T16:36:27",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07356.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07356.webp",
       "thumbWidth": 900,
@@ -3086,6 +3268,8 @@
     {
       "id": "dsc07374",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-164808",
+      "capturedAt": "2026-07-05T16:48:08",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07374.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07374.webp",
       "thumbWidth": 600,
@@ -3116,6 +3300,8 @@
     {
       "id": "dsc07503",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-170509",
+      "capturedAt": "2026-07-05T17:05:09",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07503.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07503.webp",
       "thumbWidth": 900,
@@ -3146,6 +3332,8 @@
     {
       "id": "dsc07554",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-175532",
+      "capturedAt": "2026-07-05T17:55:32",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07554.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07554.webp",
       "thumbWidth": 900,
@@ -3177,6 +3365,8 @@
     {
       "id": "dsc07579",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-175839",
+      "capturedAt": "2026-07-05T17:58:39",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07579.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07579.webp",
       "thumbWidth": 900,
@@ -3207,6 +3397,8 @@
     {
       "id": "dsc07694",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-180912",
+      "capturedAt": "2026-07-05T18:09:12",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07694.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07694.webp",
       "thumbWidth": 900,
@@ -3238,6 +3430,8 @@
     {
       "id": "dsc07712",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-180957",
+      "capturedAt": "2026-07-05T18:09:57",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07712.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07712.webp",
       "thumbWidth": 900,
@@ -3267,6 +3461,8 @@
     {
       "id": "dsc07898",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-183153",
+      "capturedAt": "2026-07-05T18:31:53",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07898.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07898.webp",
       "thumbWidth": 900,
@@ -3296,6 +3492,8 @@
     {
       "id": "dsc07943",
       "albumId": "2026-07-05-tollwood-rain-street-guitar",
+      "linkId": "20260705-184755",
+      "capturedAt": "2026-07-05T18:47:55",
       "src": "/gallery/2026-07-05-tollwood-rain-street-guitar/web/dsc07943.webp",
       "thumb": "/gallery/2026-07-05-tollwood-rain-street-guitar/thumbs/dsc07943.webp",
       "thumbWidth": 900,
@@ -3328,6 +3526,8 @@
     {
       "id": "dsc05927",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-120604",
+      "capturedAt": "2026-06-27T12:06:04",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc05927.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc05927.webp",
       "thumbWidth": 900,
@@ -3360,6 +3560,8 @@
     {
       "id": "dsc05960",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-122244",
+      "capturedAt": "2026-06-27T12:22:44",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc05960.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc05960.webp",
       "thumbWidth": 900,
@@ -3390,6 +3592,8 @@
     {
       "id": "dsc05969",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-122509",
+      "capturedAt": "2026-06-27T12:25:09",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc05969.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc05969.webp",
       "thumbWidth": 900,
@@ -3422,6 +3626,8 @@
     {
       "id": "dsc05979",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-122521",
+      "capturedAt": "2026-06-27T12:25:21",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc05979.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc05979.webp",
       "thumbWidth": 900,
@@ -3451,6 +3657,8 @@
     {
       "id": "dsc05995",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-122608",
+      "capturedAt": "2026-06-27T12:26:08",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc05995.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc05995.webp",
       "thumbWidth": 900,
@@ -3482,6 +3690,8 @@
     {
       "id": "dsc06002",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-122659",
+      "capturedAt": "2026-06-27T12:26:59",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06002.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06002.webp",
       "thumbWidth": 900,
@@ -3513,6 +3723,8 @@
     {
       "id": "dsc06024",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-122833",
+      "capturedAt": "2026-06-27T12:28:33",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06024.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06024.webp",
       "thumbWidth": 900,
@@ -3545,6 +3757,8 @@
     {
       "id": "dsc06030",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-122838",
+      "capturedAt": "2026-06-27T12:28:38",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06030.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06030.webp",
       "thumbWidth": 900,
@@ -3575,6 +3789,8 @@
     {
       "id": "dsc06108",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-123743",
+      "capturedAt": "2026-06-27T12:37:43",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06108.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06108.webp",
       "thumbWidth": 900,
@@ -3605,6 +3821,8 @@
     {
       "id": "dsc06139",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-124054",
+      "capturedAt": "2026-06-27T12:40:54",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06139.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06139.webp",
       "thumbWidth": 900,
@@ -3636,6 +3854,8 @@
     {
       "id": "dsc06172",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-124446",
+      "capturedAt": "2026-06-27T12:44:46",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06172.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06172.webp",
       "thumbWidth": 900,
@@ -3668,6 +3888,8 @@
     {
       "id": "dsc06218",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-125007",
+      "capturedAt": "2026-06-27T12:50:07",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06218.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06218.webp",
       "thumbWidth": 900,
@@ -3698,6 +3920,8 @@
     {
       "id": "dsc06219",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-125008",
+      "capturedAt": "2026-06-27T12:50:08",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06219.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06219.webp",
       "thumbWidth": 900,
@@ -3728,6 +3952,8 @@
     {
       "id": "dsc06235",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-125040",
+      "capturedAt": "2026-06-27T12:50:40",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06235.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06235.webp",
       "thumbWidth": 900,
@@ -3758,6 +3984,8 @@
     {
       "id": "dsc06241",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-125057",
+      "capturedAt": "2026-06-27T12:50:57",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06241.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06241.webp",
       "thumbWidth": 900,
@@ -3787,6 +4015,8 @@
     {
       "id": "dsc06294",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-125721",
+      "capturedAt": "2026-06-27T12:57:21",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06294.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06294.webp",
       "thumbWidth": 900,
@@ -3817,6 +4047,8 @@
     {
       "id": "dsc06422",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-130608",
+      "capturedAt": "2026-06-27T13:06:08",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06422.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06422.webp",
       "thumbWidth": 900,
@@ -3847,6 +4079,8 @@
     {
       "id": "dsc06443",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-130627",
+      "capturedAt": "2026-06-27T13:06:27",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06443.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06443.webp",
       "thumbWidth": 900,
@@ -3876,6 +4110,8 @@
     {
       "id": "dsc06488",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-131029",
+      "capturedAt": "2026-06-27T13:10:29",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06488.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06488.webp",
       "thumbWidth": 900,
@@ -3909,6 +4145,8 @@
     {
       "id": "dsc06592",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-131607",
+      "capturedAt": "2026-06-27T13:16:07",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06592.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06592.webp",
       "thumbWidth": 900,
@@ -3939,6 +4177,8 @@
     {
       "id": "dsc06676",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-182229",
+      "capturedAt": "2026-06-27T18:22:29",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06676.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06676.webp",
       "thumbWidth": 900,
@@ -3969,6 +4209,8 @@
     {
       "id": "dsc06691",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-182743",
+      "capturedAt": "2026-06-27T18:27:43",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06691.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06691.webp",
       "thumbWidth": 900,
@@ -4003,6 +4245,8 @@
     {
       "id": "dsc06695",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-192951",
+      "capturedAt": "2026-06-27T19:29:51",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06695.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06695.webp",
       "thumbWidth": 900,
@@ -4032,6 +4276,8 @@
     {
       "id": "dsc06715",
       "albumId": "2026-06-28-pride-augsburg",
+      "linkId": "20260627-194637",
+      "capturedAt": "2026-06-27T19:46:37",
       "src": "/gallery/2026-06-28-pride-augsburg/web/dsc06715.webp",
       "thumb": "/gallery/2026-06-28-pride-augsburg/thumbs/dsc06715.webp",
       "thumbWidth": 900,
@@ -4063,6 +4309,8 @@
     {
       "id": "dsc06790",
       "albumId": "2026-06-28-munich-misc",
+      "linkId": "20260628-175747",
+      "capturedAt": "2026-06-28T17:57:47",
       "src": "/gallery/2026-06-28-munich-misc/web/dsc06790.webp",
       "thumb": "/gallery/2026-06-28-munich-misc/thumbs/dsc06790.webp",
       "thumbWidth": 900,
@@ -4094,6 +4342,8 @@
     {
       "id": "dsc06799",
       "albumId": "2026-06-28-munich-misc",
+      "linkId": "20260628-180056",
+      "capturedAt": "2026-06-28T18:00:56",
       "src": "/gallery/2026-06-28-munich-misc/web/dsc06799.webp",
       "thumb": "/gallery/2026-06-28-munich-misc/thumbs/dsc06799.webp",
       "thumbWidth": 900,
@@ -4126,6 +4376,8 @@
     {
       "id": "dsc06849",
       "albumId": "2026-06-28-munich-misc",
+      "linkId": "20260628-181617",
+      "capturedAt": "2026-06-28T18:16:17",
       "src": "/gallery/2026-06-28-munich-misc/web/dsc06849.webp",
       "thumb": "/gallery/2026-06-28-munich-misc/thumbs/dsc06849.webp",
       "thumbWidth": 900,
@@ -4156,6 +4408,8 @@
     {
       "id": "dsc06859",
       "albumId": "2026-06-28-munich-misc",
+      "linkId": "20260628-182720",
+      "capturedAt": "2026-06-28T18:27:20",
       "src": "/gallery/2026-06-28-munich-misc/web/dsc06859.webp",
       "thumb": "/gallery/2026-06-28-munich-misc/thumbs/dsc06859.webp",
       "thumbWidth": 900,
@@ -4186,6 +4440,8 @@
     {
       "id": "dsc05760",
       "albumId": "2026-06-27-munich-heat",
+      "linkId": "20260626-155806",
+      "capturedAt": "2026-06-26T15:58:06",
       "src": "/gallery/2026-06-27-munich-heat/web/dsc05760.webp",
       "thumb": "/gallery/2026-06-27-munich-heat/thumbs/dsc05760.webp",
       "thumbWidth": 900,
@@ -4216,6 +4472,8 @@
     {
       "id": "dsc05781",
       "albumId": "2026-06-27-munich-heat",
+      "linkId": "20260626-161003",
+      "capturedAt": "2026-06-26T16:10:03",
       "src": "/gallery/2026-06-27-munich-heat/web/dsc05781.webp",
       "thumb": "/gallery/2026-06-27-munich-heat/thumbs/dsc05781.webp",
       "thumbWidth": 900,
@@ -4247,6 +4505,8 @@
     {
       "id": "dsc05847",
       "albumId": "2026-06-27-munich-heat",
+      "linkId": "20260626-172418",
+      "capturedAt": "2026-06-26T17:24:18",
       "src": "/gallery/2026-06-27-munich-heat/web/dsc05847.webp",
       "thumb": "/gallery/2026-06-27-munich-heat/thumbs/dsc05847.webp",
       "thumbWidth": 900,
@@ -4276,6 +4536,8 @@
     {
       "id": "dsc05690",
       "albumId": "2026-06-26-munich-heat",
+      "linkId": "20260625-152622",
+      "capturedAt": "2026-06-25T15:26:22",
       "src": "/gallery/2026-06-26-munich-heat/web/dsc05690.webp",
       "thumb": "/gallery/2026-06-26-munich-heat/thumbs/dsc05690.webp",
       "thumbWidth": 900,
@@ -4306,6 +4568,8 @@
     {
       "id": "dsc05719",
       "albumId": "2026-06-26-munich-heat",
+      "linkId": "20260625-153120",
+      "capturedAt": "2026-06-25T15:31:20",
       "src": "/gallery/2026-06-26-munich-heat/web/dsc05719.webp",
       "thumb": "/gallery/2026-06-26-munich-heat/thumbs/dsc05719.webp",
       "thumbWidth": 900,
@@ -4339,6 +4603,8 @@
     {
       "id": "dsc05727",
       "albumId": "2026-06-26-munich-heat",
+      "linkId": "20260625-153308",
+      "capturedAt": "2026-06-25T15:33:08",
       "src": "/gallery/2026-06-26-munich-heat/web/dsc05727.webp",
       "thumb": "/gallery/2026-06-26-munich-heat/thumbs/dsc05727.webp",
       "thumbWidth": 900,
@@ -4370,6 +4636,8 @@
     {
       "id": "dsc05073",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260615-082005",
+      "capturedAt": "2026-06-15T08:20:05",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05073.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05073.webp",
       "thumbWidth": 900,
@@ -4403,6 +4671,8 @@
     {
       "id": "dsc05414",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260617-193034",
+      "capturedAt": "2026-06-17T19:30:34",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05414.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05414.webp",
       "thumbWidth": 900,
@@ -4434,6 +4704,8 @@
     {
       "id": "dsc05494",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-083401",
+      "capturedAt": "2026-06-18T08:34:01",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05494.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05494.webp",
       "thumbWidth": 900,
@@ -4466,6 +4738,8 @@
     {
       "id": "dsc05560",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-163329",
+      "capturedAt": "2026-06-18T16:33:29",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05560.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05560.webp",
       "thumbWidth": 900,
@@ -4497,6 +4771,8 @@
     {
       "id": "dsc05571",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-164736",
+      "capturedAt": "2026-06-18T16:47:36",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05571.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05571.webp",
       "thumbWidth": 900,
@@ -4527,6 +4803,8 @@
     {
       "id": "dsc05578",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-164907",
+      "capturedAt": "2026-06-18T16:49:07",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05578.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05578.webp",
       "thumbWidth": 900,
@@ -4558,6 +4836,8 @@
     {
       "id": "dsc05581",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-165323",
+      "capturedAt": "2026-06-18T16:53:23",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05581.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05581.webp",
       "thumbWidth": 900,
@@ -4588,6 +4868,8 @@
     {
       "id": "dsc05589",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-172223",
+      "capturedAt": "2026-06-18T17:22:23",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05589.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05589.webp",
       "thumbWidth": 900,
@@ -4617,6 +4899,8 @@
     {
       "id": "dsc05628",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-175337",
+      "capturedAt": "2026-06-18T17:53:37",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05628.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05628.webp",
       "thumbWidth": 900,
@@ -4648,6 +4932,8 @@
     {
       "id": "dsc05671",
       "albumId": "2026-06-18-munich-reflections",
+      "linkId": "20260618-180606",
+      "capturedAt": "2026-06-18T18:06:06",
       "src": "/gallery/2026-06-18-munich-reflections/web/dsc05671.webp",
       "thumb": "/gallery/2026-06-18-munich-reflections/thumbs/dsc05671.webp",
       "thumbWidth": 900,
@@ -4677,6 +4963,8 @@
     {
       "id": "dsc04800",
       "albumId": "2026-06-13",
+      "linkId": "20260613-150546",
+      "capturedAt": "2026-06-13T15:05:46",
       "src": "/gallery/2026-06-13/web/dsc04800.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc04800.webp",
       "thumbWidth": 900,
@@ -4706,6 +4994,8 @@
     {
       "id": "dsc04819",
       "albumId": "2026-06-13",
+      "linkId": "20260613-151428",
+      "capturedAt": "2026-06-13T15:14:28",
       "src": "/gallery/2026-06-13/web/dsc04819.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc04819.webp",
       "thumbWidth": 900,
@@ -4738,6 +5028,8 @@
     {
       "id": "dsc04828",
       "albumId": "2026-06-13",
+      "linkId": "20260613-154010",
+      "capturedAt": "2026-06-13T15:40:10",
       "src": "/gallery/2026-06-13/web/dsc04828.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc04828.webp",
       "thumbWidth": 900,
@@ -4771,6 +5063,8 @@
     {
       "id": "dsc04838",
       "albumId": "2026-06-13",
+      "linkId": "20260613-160414",
+      "capturedAt": "2026-06-13T16:04:14",
       "src": "/gallery/2026-06-13/web/dsc04838.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc04838.webp",
       "thumbWidth": 900,
@@ -4801,6 +5095,8 @@
     {
       "id": "dsc04897",
       "albumId": "2026-06-13",
+      "linkId": "20260613-161954",
+      "capturedAt": "2026-06-13T16:19:54",
       "src": "/gallery/2026-06-13/web/dsc04897.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc04897.webp",
       "thumbWidth": 900,
@@ -4833,6 +5129,8 @@
     {
       "id": "dsc04992",
       "albumId": "2026-06-13",
+      "linkId": "20260613-170705",
+      "capturedAt": "2026-06-13T17:07:05",
       "src": "/gallery/2026-06-13/web/dsc04992.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc04992.webp",
       "thumbWidth": 900,
@@ -4863,6 +5161,8 @@
     {
       "id": "dsc05052",
       "albumId": "2026-06-13",
+      "linkId": "20260614-173218",
+      "capturedAt": "2026-06-14T17:32:18",
       "src": "/gallery/2026-06-13/web/dsc05052.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc05052.webp",
       "thumbWidth": 900,
@@ -4893,6 +5193,8 @@
     {
       "id": "dsc05067",
       "albumId": "2026-06-13",
+      "linkId": "20260614-183047",
+      "capturedAt": "2026-06-14T18:30:47",
       "src": "/gallery/2026-06-13/web/dsc05067.webp",
       "thumb": "/gallery/2026-06-13/thumbs/dsc05067.webp",
       "thumbWidth": 900,
@@ -4922,6 +5224,8 @@
     {
       "id": "1780574737436",
       "albumId": "2026-05-24-eisbach",
+      "linkId": "20260525-154705",
+      "capturedAt": "2026-05-25T15:47:05",
       "src": "/gallery/2026-05-24-eisbach/web/1780574737436.webp",
       "thumb": "/gallery/2026-05-24-eisbach/thumbs/1780574737436.webp",
       "thumbWidth": 900,
@@ -4954,6 +5258,8 @@
     {
       "id": "1780574838730",
       "albumId": "2026-05-24-eisbach",
+      "linkId": "20260525-163140",
+      "capturedAt": "2026-05-25T16:31:40",
       "src": "/gallery/2026-05-24-eisbach/web/1780574838730.webp",
       "thumb": "/gallery/2026-05-24-eisbach/thumbs/1780574838730.webp",
       "thumbWidth": 900,
@@ -4986,6 +5292,8 @@
     {
       "id": "1780574925656",
       "albumId": "2026-05-24-eisbach",
+      "linkId": "20260525-174529",
+      "capturedAt": "2026-05-25T17:45:29",
       "src": "/gallery/2026-05-24-eisbach/web/1780574925656.webp",
       "thumb": "/gallery/2026-05-24-eisbach/thumbs/1780574925656.webp",
       "thumbWidth": 900,
@@ -5016,6 +5324,8 @@
     {
       "id": "1780575051155",
       "albumId": "2026-05-24-eisbach",
+      "linkId": "20260525-181827",
+      "capturedAt": "2026-05-25T18:18:27",
       "src": "/gallery/2026-05-24-eisbach/web/1780575051155.webp",
       "thumb": "/gallery/2026-05-24-eisbach/thumbs/1780575051155.webp",
       "thumbWidth": 900,
@@ -5048,6 +5358,8 @@
     {
       "id": "1780575189152",
       "albumId": "2026-05-24-eisbach",
+      "linkId": "20260524-163646",
+      "capturedAt": "2026-05-24T16:36:46",
       "src": "/gallery/2026-05-24-eisbach/web/1780575189152.webp",
       "thumb": "/gallery/2026-05-24-eisbach/thumbs/1780575189152.webp",
       "thumbWidth": 900,
@@ -5078,6 +5390,8 @@
     {
       "id": "1780575542697",
       "albumId": "2026-05-24-eisbach",
+      "linkId": "20260524-185133",
+      "capturedAt": "2026-05-24T18:51:33",
       "src": "/gallery/2026-05-24-eisbach/web/1780575542697.webp",
       "thumb": "/gallery/2026-05-24-eisbach/thumbs/1780575542697.webp",
       "thumbWidth": 900,
@@ -5109,6 +5423,8 @@
     {
       "id": "1780434861694",
       "albumId": "2026-05-09-23-seanation",
+      "linkId": "20260509-072147",
+      "capturedAt": "2026-05-09T07:21:47",
       "src": "/gallery/2026-05-09-23-seanation/web/1780434861694.webp",
       "thumb": "/gallery/2026-05-09-23-seanation/thumbs/1780434861694.webp",
       "thumbWidth": 900,
@@ -5140,6 +5456,8 @@
     {
       "id": "1780435200188",
       "albumId": "2026-05-09-23-seanation",
+      "linkId": "20260523-111107",
+      "capturedAt": "2026-05-23T11:11:07",
       "src": "/gallery/2026-05-09-23-seanation/web/1780435200188.webp",
       "thumb": "/gallery/2026-05-09-23-seanation/thumbs/1780435200188.webp",
       "thumbWidth": 900,
@@ -5172,6 +5490,8 @@
     {
       "id": "1780435385833",
       "albumId": "2026-05-09-23-seanation",
+      "linkId": "20260523-175303",
+      "capturedAt": "2026-05-23T17:53:03",
       "src": "/gallery/2026-05-09-23-seanation/web/1780435385833.webp",
       "thumb": "/gallery/2026-05-09-23-seanation/thumbs/1780435385833.webp",
       "thumbWidth": 900,
@@ -5203,6 +5523,8 @@
     {
       "id": "1780567414715",
       "albumId": "2026-05-09-23-seanation",
+      "linkId": "20260511-060315",
+      "capturedAt": "2026-05-11T06:03:15",
       "src": "/gallery/2026-05-09-23-seanation/web/1780567414715.webp",
       "thumb": "/gallery/2026-05-09-23-seanation/thumbs/1780567414715.webp",
       "thumbWidth": 900,
@@ -5234,6 +5556,8 @@
     {
       "id": "1780567574528",
       "albumId": "2026-05-09-23-seanation",
+      "linkId": "20260511-180939",
+      "capturedAt": "2026-05-11T18:09:39",
       "src": "/gallery/2026-05-09-23-seanation/web/1780567574528.webp",
       "thumb": "/gallery/2026-05-09-23-seanation/thumbs/1780567574528.webp",
       "thumbWidth": 900,
@@ -5264,6 +5588,8 @@
     {
       "id": "1780567709200",
       "albumId": "2026-05-09-23-seanation",
+      "linkId": "20260511-181153",
+      "capturedAt": "2026-05-11T18:11:53",
       "src": "/gallery/2026-05-09-23-seanation/web/1780567709200.webp",
       "thumb": "/gallery/2026-05-09-23-seanation/thumbs/1780567709200.webp",
       "thumbWidth": 900,
@@ -5294,6 +5620,8 @@
     {
       "id": "1780568191595",
       "albumId": "2026-05-09-23-seanation",
+      "linkId": "20260523-035903",
+      "capturedAt": "2026-05-23T03:59:03",
       "src": "/gallery/2026-05-09-23-seanation/web/1780568191595.webp",
       "thumb": "/gallery/2026-05-09-23-seanation/thumbs/1780568191595.webp",
       "thumbWidth": 900,
@@ -5323,6 +5651,8 @@
     {
       "id": "dsc02473",
       "albumId": "2026-05-04-schleissheimer-str",
+      "linkId": "20260504-073735",
+      "capturedAt": "2026-05-04T07:37:35",
       "src": "/gallery/2026-05-04-schleissheimer-str/web/dsc02473.webp",
       "thumb": "/gallery/2026-05-04-schleissheimer-str/thumbs/dsc02473.webp",
       "thumbWidth": 900,
@@ -5355,6 +5685,8 @@
     {
       "id": "dsc02481-1",
       "albumId": "2026-05-04-schleissheimer-str",
+      "linkId": "20260504-180242",
+      "capturedAt": "2026-05-04T18:02:42",
       "src": "/gallery/2026-05-04-schleissheimer-str/web/dsc02481-1.webp",
       "thumb": "/gallery/2026-05-04-schleissheimer-str/thumbs/dsc02481-1.webp",
       "thumbWidth": 900,
@@ -5386,6 +5718,8 @@
     {
       "id": "dsc02487",
       "albumId": "2026-05-04-schleissheimer-str",
+      "linkId": "20260504-180444",
+      "capturedAt": "2026-05-04T18:04:44",
       "src": "/gallery/2026-05-04-schleissheimer-str/web/dsc02487.webp",
       "thumb": "/gallery/2026-05-04-schleissheimer-str/thumbs/dsc02487.webp",
       "thumbWidth": 900,
@@ -5414,6 +5748,8 @@
     {
       "id": "dsc02519",
       "albumId": "2026-05-04-schleissheimer-str",
+      "linkId": "20260504-181526",
+      "capturedAt": "2026-05-04T18:15:26",
       "src": "/gallery/2026-05-04-schleissheimer-str/web/dsc02519.webp",
       "thumb": "/gallery/2026-05-04-schleissheimer-str/thumbs/dsc02519.webp",
       "thumbWidth": 900,
@@ -5444,6 +5780,8 @@
     {
       "id": "dsc02534",
       "albumId": "2026-05-04-schleissheimer-str",
+      "linkId": "20260504-181723",
+      "capturedAt": "2026-05-04T18:17:23",
       "src": "/gallery/2026-05-04-schleissheimer-str/web/dsc02534.webp",
       "thumb": "/gallery/2026-05-04-schleissheimer-str/thumbs/dsc02534.webp",
       "thumbWidth": 900,
@@ -5475,6 +5813,8 @@
     {
       "id": "dsc02306-1",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-144514",
+      "capturedAt": "2026-05-03T14:45:14",
       "src": "/gallery/2026-05-03-westpark/web/dsc02306-1.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02306-1.webp",
       "thumbWidth": 900,
@@ -5505,6 +5845,8 @@
     {
       "id": "dsc02321",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-145139",
+      "capturedAt": "2026-05-03T14:51:39",
       "src": "/gallery/2026-05-03-westpark/web/dsc02321.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02321.webp",
       "thumbWidth": 900,
@@ -5536,6 +5878,8 @@
     {
       "id": "dsc02359",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-153951",
+      "capturedAt": "2026-05-03T15:39:51",
       "src": "/gallery/2026-05-03-westpark/web/dsc02359.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02359.webp",
       "thumbWidth": 900,
@@ -5566,6 +5910,8 @@
     {
       "id": "dsc02382",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-182907",
+      "capturedAt": "2026-05-03T18:29:07",
       "src": "/gallery/2026-05-03-westpark/web/dsc02382.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02382.webp",
       "thumbWidth": 900,
@@ -5595,6 +5941,8 @@
     {
       "id": "dsc02424",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-191139",
+      "capturedAt": "2026-05-03T19:11:39",
       "src": "/gallery/2026-05-03-westpark/web/dsc02424.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02424.webp",
       "thumbWidth": 900,
@@ -5626,6 +5974,8 @@
     {
       "id": "dsc02438",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-192554",
+      "capturedAt": "2026-05-03T19:25:54",
       "src": "/gallery/2026-05-03-westpark/web/dsc02438.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02438.webp",
       "thumbWidth": 900,
@@ -5652,6 +6002,8 @@
     {
       "id": "dsc02453",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-194556",
+      "capturedAt": "2026-05-03T19:45:56",
       "src": "/gallery/2026-05-03-westpark/web/dsc02453.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02453.webp",
       "thumbWidth": 900,
@@ -5683,6 +6035,8 @@
     {
       "id": "dsc02470",
       "albumId": "2026-05-03-westpark",
+      "linkId": "20260503-213037",
+      "capturedAt": "2026-05-03T21:30:37",
       "src": "/gallery/2026-05-03-westpark/web/dsc02470.webp",
       "thumb": "/gallery/2026-05-03-westpark/thumbs/dsc02470.webp",
       "thumbWidth": 900,
@@ -5714,6 +6068,8 @@
     {
       "id": "dsc01811",
       "albumId": "2026-05-02-marien-odenplatz",
+      "linkId": "20260502-181156",
+      "capturedAt": "2026-05-02T18:11:56",
       "src": "/gallery/2026-05-02-marien-odenplatz/web/dsc01811.webp",
       "thumb": "/gallery/2026-05-02-marien-odenplatz/thumbs/dsc01811.webp",
       "thumbWidth": 900,
@@ -5745,6 +6101,8 @@
     {
       "id": "dsc02021",
       "albumId": "2026-05-02-marien-odenplatz",
+      "linkId": "20260502-193458",
+      "capturedAt": "2026-05-02T19:34:58",
       "src": "/gallery/2026-05-02-marien-odenplatz/web/dsc02021.webp",
       "thumb": "/gallery/2026-05-02-marien-odenplatz/thumbs/dsc02021.webp",
       "thumbWidth": 900,
@@ -5775,6 +6133,8 @@
     {
       "id": "dsc01511-1",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-140337",
+      "capturedAt": "2026-05-01T14:03:37",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01511-1.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01511-1.webp",
       "thumbWidth": 900,
@@ -5807,6 +6167,8 @@
     {
       "id": "dsc01522",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-140856",
+      "capturedAt": "2026-05-01T14:08:56",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01522.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01522.webp",
       "thumbWidth": 900,
@@ -5835,6 +6197,8 @@
     {
       "id": "dsc01533",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-150028",
+      "capturedAt": "2026-05-01T15:00:28",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01533.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01533.webp",
       "thumbWidth": 900,
@@ -5867,6 +6231,8 @@
     {
       "id": "dsc01544",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-151633",
+      "capturedAt": "2026-05-01T15:16:33",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01544.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01544.webp",
       "thumbWidth": 900,
@@ -5898,6 +6264,8 @@
     {
       "id": "dsc01558",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-152127",
+      "capturedAt": "2026-05-01T15:21:27",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01558.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01558.webp",
       "thumbWidth": 900,
@@ -5926,6 +6294,8 @@
     {
       "id": "dsc01580",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-153359",
+      "capturedAt": "2026-05-01T15:33:59",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01580.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01580.webp",
       "thumbWidth": 900,
@@ -5957,6 +6327,8 @@
     {
       "id": "dsc01588",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-160148",
+      "capturedAt": "2026-05-01T16:01:48",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01588.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01588.webp",
       "thumbWidth": 900,
@@ -5988,6 +6360,8 @@
     {
       "id": "dsc01623",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-162448",
+      "capturedAt": "2026-05-01T16:24:48",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01623.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01623.webp",
       "thumbWidth": 900,
@@ -6017,6 +6391,8 @@
     {
       "id": "dsc01641",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-164356",
+      "capturedAt": "2026-05-01T16:43:56",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01641.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01641.webp",
       "thumbWidth": 900,
@@ -6049,6 +6425,8 @@
     {
       "id": "dsc01661",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-165652",
+      "capturedAt": "2026-05-01T16:56:52",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01661.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01661.webp",
       "thumbWidth": 900,
@@ -6081,6 +6459,8 @@
     {
       "id": "dsc01693",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-173504",
+      "capturedAt": "2026-05-01T17:35:04",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01693.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01693.webp",
       "thumbWidth": 600,
@@ -6112,6 +6492,8 @@
     {
       "id": "dsc01708",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-184553",
+      "capturedAt": "2026-05-01T18:45:53",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01708.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01708.webp",
       "thumbWidth": 600,
@@ -6144,6 +6526,8 @@
     {
       "id": "dsc01712",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-184938",
+      "capturedAt": "2026-05-01T18:49:38",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01712.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01712.webp",
       "thumbWidth": 900,
@@ -6176,6 +6560,8 @@
     {
       "id": "dsc01729",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-190458",
+      "capturedAt": "2026-05-01T19:04:58",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01729.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01729.webp",
       "thumbWidth": 900,
@@ -6207,6 +6593,8 @@
     {
       "id": "dsc01744",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-195915",
+      "capturedAt": "2026-05-01T19:59:15",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01744.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01744.webp",
       "thumbWidth": 900,
@@ -6237,6 +6625,8 @@
     {
       "id": "dsc01775",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-200941",
+      "capturedAt": "2026-05-01T20:09:41",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01775.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01775.webp",
       "thumbWidth": 900,
@@ -6266,6 +6656,8 @@
     {
       "id": "dsc01791",
       "albumId": "2026-05-01-seebensee",
+      "linkId": "20260501-201555",
+      "capturedAt": "2026-05-01T20:15:55",
       "src": "/gallery/2026-05-01-seebensee/web/dsc01791.webp",
       "thumb": "/gallery/2026-05-01-seebensee/thumbs/dsc01791.webp",
       "thumbWidth": 900,
@@ -6296,6 +6688,8 @@
     {
       "id": "dsc00714",
       "albumId": "2026-04-28-muncher-rewe",
+      "linkId": "20260428-085349",
+      "capturedAt": "2026-04-28T08:53:49",
       "src": "/gallery/2026-04-28-muncher-rewe/web/dsc00714.webp",
       "thumb": "/gallery/2026-04-28-muncher-rewe/thumbs/dsc00714.webp",
       "thumbWidth": 900,
@@ -6328,6 +6722,8 @@
     {
       "id": "dsc00724",
       "albumId": "2026-04-28-muncher-rewe",
+      "linkId": "20260428-090145",
+      "capturedAt": "2026-04-28T09:01:45",
       "src": "/gallery/2026-04-28-muncher-rewe/web/dsc00724.webp",
       "thumb": "/gallery/2026-04-28-muncher-rewe/thumbs/dsc00724.webp",
       "thumbWidth": 900,
@@ -6360,6 +6756,8 @@
     {
       "id": "dsc00765",
       "albumId": "2026-04-28-muncher-rewe",
+      "linkId": "20260428-203228",
+      "capturedAt": "2026-04-28T20:32:28",
       "src": "/gallery/2026-04-28-muncher-rewe/web/dsc00765.webp",
       "thumb": "/gallery/2026-04-28-muncher-rewe/thumbs/dsc00765.webp",
       "thumbWidth": 900,
@@ -6390,6 +6788,8 @@
     {
       "id": "dsc00788-1",
       "albumId": "2026-04-28-muncher-rewe",
+      "linkId": "20260428-203836",
+      "capturedAt": "2026-04-28T20:38:36",
       "src": "/gallery/2026-04-28-muncher-rewe/web/dsc00788-1.webp",
       "thumb": "/gallery/2026-04-28-muncher-rewe/thumbs/dsc00788-1.webp",
       "thumbWidth": 900,
@@ -6420,6 +6820,8 @@
     {
       "id": "dsc00394",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-083148",
+      "capturedAt": "2026-04-27T08:31:48",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00394.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00394.webp",
       "thumbWidth": 900,
@@ -6452,6 +6854,8 @@
     {
       "id": "dsc00424",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-090645",
+      "capturedAt": "2026-04-27T09:06:45",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00424.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00424.webp",
       "thumbWidth": 900,
@@ -6481,6 +6885,8 @@
     {
       "id": "dsc00447",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-091530",
+      "capturedAt": "2026-04-27T09:15:30",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00447.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00447.webp",
       "thumbWidth": 900,
@@ -6512,6 +6918,8 @@
     {
       "id": "dsc00491",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-192313",
+      "capturedAt": "2026-04-27T19:23:13",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00491.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00491.webp",
       "thumbWidth": 900,
@@ -6542,6 +6950,8 @@
     {
       "id": "dsc00535",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-192901",
+      "capturedAt": "2026-04-27T19:29:01",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00535.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00535.webp",
       "thumbWidth": 900,
@@ -6571,6 +6981,8 @@
     {
       "id": "dsc00540",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-194811",
+      "capturedAt": "2026-04-27T19:48:11",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00540.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00540.webp",
       "thumbWidth": 900,
@@ -6602,6 +7014,8 @@
     {
       "id": "dsc00593",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-195601",
+      "capturedAt": "2026-04-27T19:56:01",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00593.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00593.webp",
       "thumbWidth": 900,
@@ -6633,6 +7047,8 @@
     {
       "id": "dsc00608",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-200019",
+      "capturedAt": "2026-04-27T20:00:19",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00608.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00608.webp",
       "thumbWidth": 900,
@@ -6665,6 +7081,8 @@
     {
       "id": "dsc00622",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-200945",
+      "capturedAt": "2026-04-27T20:09:45",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00622.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00622.webp",
       "thumbWidth": 900,
@@ -6695,6 +7113,8 @@
     {
       "id": "dsc00627-1",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-201308",
+      "capturedAt": "2026-04-27T20:13:08",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00627-1.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00627-1.webp",
       "thumbWidth": 900,
@@ -6726,6 +7146,8 @@
     {
       "id": "dsc00682",
       "albumId": "2026-04-27-nordfriedhof-munchner-freiheit",
+      "linkId": "20260427-205433",
+      "capturedAt": "2026-04-27T20:54:33",
       "src": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/web/dsc00682.webp",
       "thumb": "/gallery/2026-04-27-nordfriedhof-munchner-freiheit/thumbs/dsc00682.webp",
       "thumbWidth": 900,
@@ -6755,6 +7177,8 @@
     {
       "id": "dsc00083",
       "albumId": "2026-04-26",
+      "linkId": "20260426-142931",
+      "capturedAt": "2026-04-26T14:29:31",
       "src": "/gallery/2026-04-26/web/dsc00083.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00083.webp",
       "thumbWidth": 900,
@@ -6786,6 +7210,8 @@
     {
       "id": "dsc00123",
       "albumId": "2026-04-26",
+      "linkId": "20260426-174938",
+      "capturedAt": "2026-04-26T17:49:38",
       "src": "/gallery/2026-04-26/web/dsc00123.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00123.webp",
       "thumbWidth": 900,
@@ -6818,6 +7244,8 @@
     {
       "id": "dsc00144",
       "albumId": "2026-04-26",
+      "linkId": "20260426-180628",
+      "capturedAt": "2026-04-26T18:06:28",
       "src": "/gallery/2026-04-26/web/dsc00144.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00144.webp",
       "thumbWidth": 900,
@@ -6849,6 +7277,8 @@
     {
       "id": "dsc00304",
       "albumId": "2026-04-26",
+      "linkId": "20260426-194615",
+      "capturedAt": "2026-04-26T19:46:15",
       "src": "/gallery/2026-04-26/web/dsc00304.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00304.webp",
       "thumbWidth": 900,
@@ -6880,6 +7310,8 @@
     {
       "id": "dsc00308-1",
       "albumId": "2026-04-26",
+      "linkId": "20260426-195934",
+      "capturedAt": "2026-04-26T19:59:34",
       "src": "/gallery/2026-04-26/web/dsc00308-1.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00308-1.webp",
       "thumbWidth": 900,
@@ -6909,6 +7341,8 @@
     {
       "id": "dsc00338",
       "albumId": "2026-04-26",
+      "linkId": "20260426-200532",
+      "capturedAt": "2026-04-26T20:05:32",
       "src": "/gallery/2026-04-26/web/dsc00338.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00338.webp",
       "thumbWidth": 900,
@@ -6940,6 +7374,8 @@
     {
       "id": "dsc00350",
       "albumId": "2026-04-26",
+      "linkId": "20260426-200744",
+      "capturedAt": "2026-04-26T20:07:44",
       "src": "/gallery/2026-04-26/web/dsc00350.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00350.webp",
       "thumbWidth": 900,
@@ -6968,6 +7404,8 @@
     {
       "id": "dsc00367",
       "albumId": "2026-04-26",
+      "linkId": "20260426-201822",
+      "capturedAt": "2026-04-26T20:18:22",
       "src": "/gallery/2026-04-26/web/dsc00367.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00367.webp",
       "thumbWidth": 900,
@@ -7000,6 +7438,8 @@
     {
       "id": "dsc00380",
       "albumId": "2026-04-26",
+      "linkId": "20260426-202904",
+      "capturedAt": "2026-04-26T20:29:04",
       "src": "/gallery/2026-04-26/web/dsc00380.webp",
       "thumb": "/gallery/2026-04-26/thumbs/dsc00380.webp",
       "thumbWidth": 900,

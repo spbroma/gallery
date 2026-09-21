@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -162,6 +163,57 @@ def convert_image(source: Path, destination: Path, max_edge: int, quality: int) 
         resized.unlink(missing_ok=True)
 
 
+def capture_timestamps(images: list[Path]) -> dict[Path, str]:
+    """Read capture times in one exiftool call; publishing still works without it."""
+    if not images:
+        return {}
+    try:
+        result = subprocess.run(
+            ["exiftool", "-json", "-DateTimeOriginal", "-CreateDate", *map(str, images)],
+            check=True, capture_output=True, text=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return {}
+
+    timestamps: dict[Path, str] = {}
+    try:
+        entries = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {}
+    for entry in entries:
+        raw = entry.get("DateTimeOriginal") or entry.get("CreateDate")
+        source = entry.get("SourceFile")
+        if not raw or not source:
+            continue
+        try:
+            captured = datetime.strptime(raw[:19], "%Y:%m:%d %H:%M:%S")
+        except ValueError:
+            continue
+        timestamps[Path(source).resolve()] = captured.strftime("%Y-%m-%dT%H:%M:%S")
+    return timestamps
+
+
+def assign_link_ids(photos: list[dict[str, Any]]) -> None:
+    """Assign stable, human-readable timestamp IDs without exposing filenames."""
+    used = {photo["linkId"] for photo in photos if photo.get("linkId")}
+    for photo in photos:
+        if photo.get("linkId"):
+            continue
+        captured_at = photo.get("capturedAt")
+        try:
+            base = datetime.fromisoformat(captured_at).strftime("%Y%m%d-%H%M%S") if captured_at else ""
+        except ValueError:
+            base = ""
+        if not base:
+            base = f"{photo.get('date', '0000-00-00').replace('-', '')}-000000"
+        identifier = base
+        if identifier in used:
+            key = f"{photo.get('albumId', '')}/{photo.get('id', '')}"
+            identifier = f"{base}-{hashlib.sha256(key.encode()).hexdigest()[:6]}"
+        photo["linkId"] = identifier
+        used.add(identifier)
+
+
 def build_storage(config: dict[str, Any], output_root: Path):
     storage = config["storage"]
     if storage["provider"] == "local":
@@ -250,6 +302,7 @@ def main() -> None:
                 images = images[:int(limit)]
             if images:
                 print(f"[{relative}] preparing {len(images)} published photos", flush=True)
+            timestamps = capture_timestamps(images)
             for image_index, image in enumerate(images, start=1):
                 print(f"[{relative}] {image_index}/{len(images)} {image.name}", flush=True)
                 identifier = photo_id(image)
@@ -278,6 +331,7 @@ def main() -> None:
                 effective_tags = validate_tags([*tag_data.get("manual", []), *tag_data.get("generated", [])]) if isinstance(tag_data, dict) else validate_tags(tag_data)
                 photos.append({
                     "id": identifier, "albumId": album_id,
+                    "linkId": None, "capturedAt": timestamps.get(image.resolve()),
                     "src": f"{base_url}/{album_id}/web/{web_name}", "thumb": f"{base_url}/{album_id}/thumbs/{web_name}",
                     "thumbWidth": thumb_width, "thumbHeight": thumb_height,
                     "title": title, "date": date, "year": year, "city": city, "rating": rating,
@@ -329,6 +383,8 @@ def main() -> None:
                 destination.relative_to(output_root.resolve())
                 if destination.is_dir():
                     shutil.rmtree(destination)
+
+    assign_link_ids(photos)
 
     active_ids = {album["id"] for album in albums}
     if not config["publishing"].get("albumAllowlist") and output_root.exists():
